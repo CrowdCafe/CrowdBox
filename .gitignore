@@ -1,0 +1,6 @@
+static/
+*/*.pyc
+*.pyc
+*.sqlite3
+*/*secret.py
+*.log

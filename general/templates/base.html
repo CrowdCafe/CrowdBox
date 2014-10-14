@@ -1,0 +1,53 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en" data-ember-extension="1"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>Crop your images</title>
+
+<!-- Bootstrap core CSS -->
+<link href="{% static 'bootstrap/dist/css/bootstrap.min.css'%}" rel="stylesheet">
+
+
+<!-- Custom styles for this template -->
+<link href="{% static 'css/justified-nav.css'%}" rel="stylesheet">
+<link href="{% static 'css/style.css'%}" rel="stylesheet">
+
+<!-- Just for debugging purposes. Don't actually copy this line! -->
+<!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+      <style id="holderjs-style" type="text/css"></style><script>window["_GOOG_TRANS_EXT_VER"] = "1";</script><script>window["_GOOG_TRANS_EXT_VER"] = "1";</script><script>window["_GOOG_TRANS_EXT_VER"] = "1";</script></head>
+
+      <body>
+
+        {% include 'navigation.html'%}
+
+        {% block title%}
+        {% endblock %}
+
+        {% block content%}
+        {% endblock %}
+
+        {% block modals%}
+        {% endblock %}
+
+
+
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{% static 'jquery/dist/jquery.min.js' %}" ></script>
+    <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    {% block js%}
+    {% endblock %}
+    
+  </body>
+  </html>

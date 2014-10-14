@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="cover-heading">Prepare images for Mabrle Blocks 3D modelling</h1>
+        <!-- This is where the widget will be. Don't forget the name attribute! -->
+        <form method="POST" action="{% url 'block-create' %}">
+            <div class="input-group">
+                <input type="text" class="form-control center" id="block-name" placeholder='block name: MD438'
+                       value="MD 438">
+		<span class="input-group-btn">
+			<button class="btn btn-primary create-block" type="button">Create block</button>
+		</span>
+            </div>
+    </div>
+    <div class='container'>
+        <div class='block-container'>
+        </div>
+    </div>
+{% endblock %}
+
+{% block modals %}
+    <div class="modal fade" id="modalBlockImages">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    <table class='table table-hover images-table'>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" role="uploadcare-uploader"
+                           data-images-only="true"
+                           data-multiple="true"/>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+{% endblock %}
