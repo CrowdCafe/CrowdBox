@@ -16,18 +16,21 @@ def webhook_dropbox(request):
     if 'challenge' in request.GET:
     	return HttpResponse(request.GET['challenge'])
     else:
-    	for uid in json.loads(request.body)['delta']['users']:
-            log.debug(uid)
-            dbuser = DropboxClient(uid)
-            updates = dbuser.checkUpdates()
-            log.debug(updates)
-            
-            for path, metadata  in updates:
-                rockpearl = ImageUnit(dbuser)
-                rockpearl.decideWhatToDo(path, metadata)
-                #crowdcrop.publishImage(path, metadata)
-    	
-        return HttpResponse(status=200)
+        if request.body:
+            log.debug(request.body)
+            for uid in json.loads(request.body)['delta']['users']:
+                log.debug(uid)
+                dbuser = DropboxClient(uid)
+                updates = dbuser.checkUpdates()
+                log.debug(updates)
+
+                for path, metadata  in updates:
+                    rockpearl = ImageUnit(dbuser)
+                    rockpearl.decideWhatToDo(path, metadata)
+                    #crowdcrop.publishImage(path, metadata)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=405)
 
 def getMediaLink(request, uid):
     if uid and 'path' in request.GET:
