@@ -235,7 +235,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 #STATIC_URL = 'https://s3-eu-west-1.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
-
+STATIC_ROOT = '/var/www/pixelman.io/static/'
 
 # List of finder classes that know how to find static1 files in
 # various locations.
