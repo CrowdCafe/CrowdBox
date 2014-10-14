@@ -4,3 +4,4 @@ static/
 *.sqlite3
 */*secret.py
 *.log
+.idea/
