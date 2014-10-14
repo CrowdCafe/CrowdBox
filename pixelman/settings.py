@@ -67,6 +67,7 @@ INSTALLED_APPS = (
     'social_auth',
     'general',
     'dropbox',
+    'dropbox_client',
     'webhook',
     'djcelery',
     'djrill',
@@ -86,9 +87,9 @@ MIDDLEWARE_CLASSES = (
     'social_auth.middleware.SocialAuthExceptionMiddleware',
 )
 
-ROOT_URLCONF = 'crowdcrop.urls'
+ROOT_URLCONF = 'pixelman.urls'
 
-WSGI_APPLICATION = 'crowdcrop.wsgi.application'
+WSGI_APPLICATION = 'pixelman.wsgi.application'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -127,7 +128,7 @@ LOGGING = {
         'logfile': {
                 'level':'DEBUG',
                 'class':'logging.handlers.RotatingFileHandler',
-                'filename': "/var/log/django/crowdcrop.log",
+                'filename': "/var/log/django/pixelman.log",
                 'maxBytes': 50000,
                 'backupCount': 3,
                 'formatter': 'standard'
