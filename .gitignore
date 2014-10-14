@@ -6,3 +6,4 @@ static/
 *.log
 .idea/
 gunicorn.conf.py
+components/

@@ -42,7 +42,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['crowdcrop.crowdcafe.io','80.240.134.163','localhost']
 
-BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'static')
+BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
 BOWER_INSTALLED_APPS = (
     'bootstrap',
