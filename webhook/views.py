@@ -25,8 +25,8 @@ def webhook_dropbox(request):
                 log.debug(updates)
 
                 for path, metadata  in updates:
-                    rockpearl = ImageUnit(dbuser)
-                    rockpearl.decideWhatToDo(path, metadata)
+                    dropboxfile = ImageUnit(dbuser)
+                    dropboxfile.decideWhatToDo(path, metadata)
                     #crowdcrop.publishImage(path, metadata)
             return HttpResponse(status=200)
         else:

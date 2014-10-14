@@ -3,12 +3,15 @@ from social_auth.models import UserSocialAuth
 from dropbox import client, session
 from django.conf import settings
 from StringIO import StringIO
+import logging
+log = logging.getLogger(__name__)
 
 # class for managing dropbox operations:
 
 
 class DropboxClient:
     def __init__(self, uid):
+
         self.uid = uid
         self.dropbox_user, created = DropboxUser.objects.get_or_create(uid=uid)
 
@@ -27,6 +30,7 @@ class DropboxClient:
 
     # check updates (files and folders) for a specific user
     def checkUpdates(self):
+        log.debug(self)
         has_more = True
         updates = []
         while has_more:

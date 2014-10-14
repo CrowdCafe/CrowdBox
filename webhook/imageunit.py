@@ -23,7 +23,6 @@ class ImageUnit:
         filename = path[path.rfind('/') + 1:len(path)]
         rest_path = path[:path.rfind('/')]
         folder = rest_path[rest_path.rfind('/') + 1:len(rest_path)]
-
         if metadata and metadata['mime_type'] in ['image/jpeg', 'image/png']:
             if 'inprogress_' not in filename and 'completed_' not in filename:
                 self.publishImage(path, metadata)
@@ -86,13 +85,12 @@ class ImageUnit:
         rest_path = path[:path.rfind('/')]
         folder = rest_path[rest_path.rfind('/') + 1:len(rest_path)]
 
-        if metadata and metadata['mime_type'] in ['image/jpeg',
-                                                  'image/png'] and 'inprogress_' not in filename and 'completed_' not in filename:
+        if metadata and metadata['mime_type'] in ['image/jpeg','image/png'] and 'inprogress_' not in filename and 'completed_' not in filename:
             uid = self.dropbox_user.uid
-            log.debug('path and metadata')
+            log.debug('path and metadata:')
             log.debug(path)
             log.debug(metadata)
-
+            log.debug('updated metadata:')
             new_metadata = self.dropbox_user.client.metadata(path, include_media_info=True)
             log.debug(new_metadata)
 
