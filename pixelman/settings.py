@@ -155,7 +155,7 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        'imagesource': {
+        'webhook': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,

@@ -17,7 +17,7 @@ def webhook_dropbox(request):
     	return HttpResponse(request.GET['challenge'])
     else:
     	for uid in json.loads(request.body)['delta']['users']:
-
+            log.debug(uid)
             dbuser = DropboxClient(uid)
             updates = dbuser.checkUpdates()
             log.debug(updates)
