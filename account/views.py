@@ -19,7 +19,7 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import FormView
 
-from forms import LoginForm, UserCreateForm, AccountForm, MembershipForm, UserUpdate, PayPalForm, FundTransferForm
+from forms import LoginForm, UserCreateForm, AccountForm, MembershipForm, UserUpdate,  FundTransferForm #,PayPalForm
 from models import Account, Membership, FundTransfer
 
 
@@ -176,7 +176,7 @@ class AccountUpdateView(UpdateView):
         account = form.save()
         return redirect(reverse('account-list'))
 
-
+'''
 class PayPalPayment(FormView):
     template_name = "crispy.html"
     form_class = PayPalForm
@@ -193,7 +193,7 @@ class PayPalPayment(FormView):
             "custom": self.kwargs.get('account_pk', None)
         }
         return initial
-
+'''
 
 @csrf_exempt
 def acceptPayment(request):
