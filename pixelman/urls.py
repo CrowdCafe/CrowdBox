@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r'account/', include('social_auth.urls')),
     url(r'user/', include('account.urls')),
     url(r'marble3d/', include('marble3d.urls')),
-    url(r'imagesource/', include('imagesource.urls')),
+    url(r'webhook/', include('webhook.urls')),
 
     url(r'admin/', include(admin.site.urls)),
 )

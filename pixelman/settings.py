@@ -67,7 +67,7 @@ INSTALLED_APPS = (
     'social_auth',
     'general',
     'dropbox',
-    'imagesource',
+    'webhook',
     'djcelery',
     'djrill',
     'shapes',
