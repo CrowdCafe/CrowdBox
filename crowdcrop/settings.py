@@ -232,7 +232,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static1-files/
-
+STATICFILES_DIRS = (
+    # ...
+    ("static",),
+)
 STATIC_URL = '/static/'
 #STATIC_URL = 'https://s3-eu-west-1.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
 STATIC_ROOT = 'static/'
