@@ -71,7 +71,7 @@ INSTALLED_APPS = (
     'djcelery',
     'djrill',
     'shapes',
-    'paypal.standard.ipn',
+    #'paypal.standard.ipn',
     #'djkombu',
     'kombu.transport.django',
 )
