@@ -5,3 +5,4 @@ static/
 */*secret.py
 *.log
 .idea/
+gunicorn.conf.py
