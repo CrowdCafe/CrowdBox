@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, include, url
-from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+
 import views
 
 urlpatterns = patterns('',
@@ -23,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^accounts/(?P<account_pk>\d+)/payment/request/$', login_required(views.PayPalPayment.as_view()), name='account-payment-request'),
 
     url(r'^accounts/payment/accept/$', login_required(views.acceptPayment), name='account-payment-accept'),
-    url(r'^accounts/paypal/', include('paypal.standard.ipn.urls')),
+    # url(r'^accounts/paypal/', include('paypal.standard.ipn.urls')),
 
     url(r'^accounts/(?P<account_pk>\d+)/transfers/$', login_required(views.FundTransferListView.as_view()), name='fundtransfer-list'),
 
