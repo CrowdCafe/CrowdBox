@@ -154,9 +154,9 @@ class DropboxFile:
     def rename(self, new_filename):
         old_path = self.getPath()
         new_path = self.getLocation()+'/'+new_filename
-        if self.client.api.file_move(old_path,new_path):
-            self.path = new_path
-            self.updateMetadata()
+        self.client.api.file_move(old_path,new_path)
+        self.path = new_path
+        self.updateMetadata()
 
     def isImage(self):
         if self.metadata:
@@ -166,7 +166,9 @@ class DropboxFile:
         return False
 
     def updateMetadata(self):
-        self.metadata = self.client.getMetadata(self.path)
+        path = self.getPath()
+        log.debug('retreive metadata for '+path)
+        self.metadata = self.client.getMetadata(path)
 
     def getMediaURL(self):
         media = self.client.getDirectLink(self.path)
