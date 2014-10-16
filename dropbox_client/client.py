@@ -149,7 +149,9 @@ class DropboxFile:
         if self.metadata:
             if 'is_deleted' in self.metadata:
                 return self.metadata['is_deleted']
-        return True
+            else:
+                return False
+        return False
 
     def rename(self, new_filename):
         old_path = self.getPath()
