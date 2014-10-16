@@ -158,6 +158,7 @@ class DropboxFile:
         log.debug('new_path '+new_path)
 
         self.client.api.file_move(old_path,new_path)
+        log.debug('file renamed')
         self.path = new_path
         self.updateMetadata()
 
