@@ -31,7 +31,7 @@ class CrowdBoxImage:
         if UnitIdKeyword in filename:
             unitid_with_filename = filename[filename.rfind(UnitIdKeyword)+len(UnitIdKeyword):len(filename)]
             log.debug(unitid_with_filename)
-            unit_id = int(unitid_with_filename[:unitid_with_filename.lfind('_')])
+            unit_id = int(unitid_with_filename[:unitid_with_filename.find('_')])
             log.debug(unit_id)
             return unit_id
         log.debug(UnitIdKeyword+' is not in the '+filename)
