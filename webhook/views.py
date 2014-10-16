@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
 
 from dropbox_client.client import DropboxClient
-from imageunit import ImageUnit
+from imageunit import ImageUnit, DropboxFileUpdate
 
 
 log = logging.getLogger(__name__)
@@ -25,8 +25,10 @@ def webhook_dropbox(request):
                 log.debug(updates)
 
                 for path, metadata  in updates:
-                    dropboxfile = ImageUnit(dbuser)
-                    dropboxfile.decideWhatToDo(path, metadata)
+                    fileupdate = DropboxFileUpdate(dbuser, path, metadata)
+
+                    #dropboxfile = ImageUnit(dbuser)
+                    #dropboxfile.decideWhatToDo(path, metadata)
                     #crowdcrop.publishImage(path, metadata)
             return HttpResponse(status=200)
         else:

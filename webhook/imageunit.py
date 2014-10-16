@@ -8,6 +8,34 @@ log = logging.getLogger(__name__)
 crowdcafe = CrowdCafeAPI()
 from PIL import Image, ImageDraw
 
+class DropboxFileUpdate:
+    def __init__(self, dropbox_user, path, metadata):
+        self.dropbox_user = dropbox_user
+        self.path = path
+        self.metadata = metadata
+
+        log.debug('path:')
+        log.debug(self.path)
+
+        log.debug('metadata:')
+        log.debug(self.metadata)
+
+        self.isDeleted()
+
+
+    def isFolder(self):
+        if self.metadata:
+            if self.metadata['is_dir']:
+                return True
+        return False
+
+    def isDeleted(self):
+        new_metadata = self.dropbox_user.client.metadata(self.path, include_media_info=True)
+        log.debug(new_metadata)
+        return False
+
+    def isImage(self):
+        return False
 
 class ImageUnit:
     def __init__(self, dropbox_user):
@@ -23,6 +51,8 @@ class ImageUnit:
         filename = path[path.rfind('/') + 1:len(path)]
         rest_path = path[:path.rfind('/')]
         folder = rest_path[rest_path.rfind('/') + 1:len(rest_path)]
+
+
         if metadata and metadata['mime_type'] in ['image/jpeg', 'image/png']:
             if 'inprogress_' not in filename and 'completed_' not in filename:
                 self.publishImage(path, metadata)
