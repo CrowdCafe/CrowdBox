@@ -40,7 +40,7 @@ class CrowdBoxImage:
 
         return False
     def createCrowdCafeUnit(self):
-        new_unit_response = self.crowdcafe.createUnit(self.job_id, {'blank':'yes'})
+        new_unit_response = self.crowdcafe_client.createUnit(self.job_id, {'blank':'yes'})
 
         unit = new_unit_response.json()
         # rename file
@@ -55,7 +55,7 @@ class CrowdBoxImage:
             'block_title':self.dropboxfile.getRoot()
         }
         unit.input_data = unit_new_data
-        self.crowdcafe.updateUnit(self.job_id,unit)
+        self.crowdcafe_client.updateUnit(self.job_id,unit)
 '''
 class ImageUnit:
     def __init__(self, dropbox_user):
