@@ -20,12 +20,12 @@ def webhook_dropbox(request):
             log.debug(request.body)
             for uid in json.loads(request.body)['delta']['users']:
                 log.debug(uid)
-                dbuser = DropboxClient(uid)
-                updates = dbuser.checkUpdates()
+                dropboxclient = DropboxClient(uid)
+                updates = dropboxclient.checkUpdates()
                 log.debug(updates)
 
                 for path, metadata  in updates:
-                    dropboxfile = DropboxFile(dbuser, path, metadata)
+                    dropboxfile = DropboxFile(dropboxclient, path, metadata)
                     if dropboxfile.isImage():
                         crowdboximage = CrowdBoxImage(dropboxfile)
                         if crowdboximage.checkFilenameStatus():

@@ -21,6 +21,7 @@ class CrowdBoxImage:
         statuses = ('inprocess','completed')
         for status in statuses:
             if status+'_' in self.dropboxfile.getFilename():
+                log.debug(status)
                 return status
         return False
     def checkFilenameUnitId(self):
