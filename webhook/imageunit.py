@@ -26,7 +26,7 @@ class CrowdBoxImage:
         return False
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
-        UnitIdKeyword = 'CCunitid'
+        UnitIdKeyword = 'ccunitid'
 
         if UnitIdKeyword in filename:
             unitid_with_filename = filename[filename.rfind(UnitIdKeyword)+len(UnitIdKeyword):len(filename)]
