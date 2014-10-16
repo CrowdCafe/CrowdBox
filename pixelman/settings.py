@@ -155,6 +155,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'dropbox_client': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'crowdcafe_client': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'webhook': {
             'handlers': ['console'],
             'level': 'DEBUG',
