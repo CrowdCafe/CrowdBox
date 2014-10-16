@@ -1,65 +1,69 @@
 from crowdcafe_client.client import CrowdCafeAPI
 from marble3d.utils import getFileViaUrl
+from django.conf import settings
+
 import logging
 import numpy
 
 log = logging.getLogger(__name__)
 
-crowdcafe = CrowdCafeAPI()
 from PIL import Image, ImageDraw
 
-class DropboxFileUpdate:
-    def __init__(self, dropbox_user, path, metadata):
-        self.dropbox_user = dropbox_user
-        self.path = path
-        self.metadata = metadata
-
-        log.debug('path:')
-        log.debug(self.path)
-
-        log.debug('metadata:')
-        log.debug(self.metadata)
-
-        self.isDeleted()
 
 
-    def isFolder(self):
-        if self.metadata:
-            if self.metadata['is_dir']:
-                return True
+class CrowdBoxImage:
+    def __init__(self, dropboxfile):
+        self.dropboxfile = dropboxfile
+        self.job_id = settings.CROWDCAFE['job_id']
+        self.crowdcafe_client = CrowdCafeAPI()
+
+    def checkFilenameStatus(self):
+        statuses = ('inprocess','completed')
+        for status in statuses:
+            if status+'_' in self.dropboxfile.getFilename():
+                return status
+        return False
+    def checkFilenameUnitId(self):
+        filename = self.dropboxfile.getFilename()
+        UnitIdKeyword = 'CCunitid'
+
+        if UnitIdKeyword in filename:
+            unitid_with_filename = filename[filename.rfind(UnitIdKeyword)+len(UnitIdKeyword):len(filename)]
+            log.debug(unitid_with_filename)
+            unit_id = int(unitid_with_filename[:unitid_with_filename.lfind('_')])
+            log.debug(unit_id)
+            return unit_id
+        log.debug(UnitIdKeyword+' is not in the '+filename)
         return False
 
-    def isDeleted(self):
-        new_metadata = self.dropbox_user.client.metadata(self.path, include_media_info=True)
-        log.debug(new_metadata)
-        return False
+    def unpublishCrowdCafeUnit(self, unit_id):
 
-    def isImage(self):
         return False
+    def createCrowdCafeUnit(self):
+        new_unit_response = self.crowdcafe.createUnit(self.job_id, {'blank':'yes'})
 
+        unit = new_unit_response.json()
+        # rename file
+        new_filename = 'inprocess_CCunitid'+str(unit['pk'])+'_'+self.dropboxfile.getFilename()
+        self.dropboxfile.rename(new_filename)
+
+        #TODO add url to the image
+        unit_new_data = {
+            'uid':self.dropboxfile.client.getUid(),
+            'path':self.dropboxfile.getPath(),
+            'image_filename':self.dropboxfile.getFilename(),
+            'block_title':self.dropboxfile.getRoot()
+        }
+        unit.input_data = unit_new_data
+        self.crowdcafe.updateUnit(self.job_id,unit)
+'''
 class ImageUnit:
     def __init__(self, dropbox_user):
         self.dropbox_user = dropbox_user
         self.job_id = 8
         self.rockpearl_url = 'http://crowdcrop.crowdcafe.io/'
 
-    def getMediaURL(self, path):
-        media = self.dropbox_user.getDirectLink(path)
-        return media['url']
 
-    def decideWhatToDo(self, path, metadata):
-        filename = path[path.rfind('/') + 1:len(path)]
-        rest_path = path[:path.rfind('/')]
-        folder = rest_path[rest_path.rfind('/') + 1:len(rest_path)]
-
-
-        if metadata and metadata['mime_type'] in ['image/jpeg', 'image/png']:
-            if 'inprogress_' not in filename and 'completed_' not in filename:
-                self.publishImage(path, metadata)
-            else:
-                unit_id = self.getUnitIdByPath(path)
-                if unit_id:
-                    self.unpublishImage()
 
     def makeCroppedImage(self, original_image, judgement):
         # read image as RGB and add alpha (transparency)
@@ -98,8 +102,7 @@ class ImageUnit:
     def getOriginalImage(self, input_data):
         return getFileViaUrl(input_data['url'])
 
-    def unpublishImage(self, path, metadata):
-        return False
+
 
     def getUnitIdByPath(self, path):
         key = 'inprogress_'
@@ -110,18 +113,4 @@ class ImageUnit:
         else:
             return None
 
-    def publishImage(self, path, metadata):
-        filename = path[path.rfind('/') + 1:len(path)]
-        rest_path = path[:path.rfind('/')]
-        folder = rest_path[rest_path.rfind('/') + 1:len(rest_path)]
-
-        if metadata and metadata['mime_type'] in ['image/jpeg','image/png'] and 'inprogress_' not in filename and 'completed_' not in filename:
-            uid = self.dropbox_user.uid
-            log.debug('path and metadata:')
-            log.debug(path)
-            log.debug(metadata)
-            log.debug('updated metadata:')
-            new_metadata = self.dropbox_user.client.metadata(path, include_media_info=True)
-            log.debug(new_metadata)
-
-        return True
+'''

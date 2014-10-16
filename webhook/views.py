@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
 
-from dropbox_client.client import DropboxClient
-from imageunit import ImageUnit, DropboxFileUpdate
+from dropbox_client.client import DropboxClient, DropboxFile
+from imageunit import CrowdBoxImage
 
 
 log = logging.getLogger(__name__)
@@ -25,8 +25,13 @@ def webhook_dropbox(request):
                 log.debug(updates)
 
                 for path, metadata  in updates:
-                    fileupdate = DropboxFileUpdate(dbuser, path, metadata)
-
+                    dropboxfile = DropboxFile(dbuser, path, metadata)
+                    if dropboxfile.isImage():
+                        crowdboximage = CrowdBoxImage(dropboxfile)
+                        if crowdboximage.checkFilenameStatus():
+                            log.debug(crowdboximage.checkFilenameUnitId)
+                        else:
+                            crowdboximage.createCrowdCafeUnit()
                     #dropboxfile = ImageUnit(dbuser)
                     #dropboxfile.decideWhatToDo(path, metadata)
                     #crowdcrop.publishImage(path, metadata)
@@ -37,9 +42,8 @@ def webhook_dropbox(request):
 def getMediaLink(request, uid):
     if uid and 'path' in request.GET:
         path = request.GET['path']
-        dbuser = DropboxClient(uid)
-        rockpearl = ImageUnit(dbuser)
-
-        return redirect(rockpearl.getMediaURL(path))
+        dropboxclient = DropboxClient(uid)
+        media = dropboxclient.getDirectLink(path)
+        return redirect(media['url'])
     else:
         return HttpResponse(status=404)
