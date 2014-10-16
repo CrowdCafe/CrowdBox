@@ -116,10 +116,13 @@ class DropboxFile:
 
         log.debug('metadata:')
         log.debug(self.metadata)
+
     def getPath(self):
         return self.path
+
     def getMetadata(self):
         return self.metadata
+
     def getFilename(self):
         filename = self.path[self.path.rfind('/') + 1:len(self.path)]
         log.debug('filename: '+filename)
@@ -147,8 +150,9 @@ class DropboxFile:
             if 'is_deleted' in self.metadata:
                 return self.metadata['is_deleted']
         return True
+
     def rename(self, new_filename):
-        old_path = self.path
+        old_path = self.getPath()
         new_path = self.getLocation()+'/'+new_filename
         if self.client.api.file_move(old_path,new_path):
             self.path = new_path
