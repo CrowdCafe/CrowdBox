@@ -28,10 +28,13 @@ def webhook_dropbox(request):
                     dropboxfile = DropboxFile(dropboxclient, path, metadata)
                     if dropboxfile.isImage():
                         crowdboximage = CrowdBoxImage(dropboxfile)
-                        if crowdboximage.checkFilenameStatus():
-                            log.debug(crowdboximage.checkFilenameUnitId)
+                        if dropboxfile.isDeleted():
+                            log.debug('file '+dropboxfile.getFilename()+' is deleted')
                         else:
-                            crowdboximage.createCrowdCafeUnit()
+                            if crowdboximage.checkFilenameStatus():
+                                log.debug(crowdboximage.checkFilenameUnitId)
+                            else:
+                                crowdboximage.createCrowdCafeUnit()
                     #dropboxfile = ImageUnit(dbuser)
                     #dropboxfile.decideWhatToDo(path, metadata)
                     #crowdcrop.publishImage(path, metadata)
