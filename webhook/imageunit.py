@@ -56,7 +56,7 @@ class CrowdBoxImage:
             'block_title':self.dropboxfile.getRoot()
         }
         unit['input_data'] = unit_new_data
-        self.crowdcafe_client.updateUnit(self.job_id,unit)
+        self.crowdcafe_client.updateUnit(unit['pk'],unit)
 '''
 class ImageUnit:
     def __init__(self, dropbox_user):
