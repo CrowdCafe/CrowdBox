@@ -111,11 +111,11 @@ class DropboxFile:
         self.path = path
         self.updateMetadata()
 
-        log.debug('path:')
-        log.debug(self.path)
+        #log.debug('path:')
+        #log.debug(self.path)
 
-        log.debug('metadata:')
-        log.debug(self.metadata)
+        #log.debug('metadata:')
+        #log.debug(self.metadata)
 
     def getPath(self):
         return self.path
