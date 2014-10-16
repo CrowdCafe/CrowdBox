@@ -37,15 +37,23 @@ class CrowdBoxImage:
         log.debug(UnitIdKeyword+' is not in the '+filename)
         return False
 
-    def unpublishCrowdCafeUnit(self, unit_id):
+    def unpublishCrowdCafeUnit(self):
+        unit_id = self.checkFilenameUnitId()
 
-        return False
+        if unit_id:
+            unit_response = self.crowdcafe_client.getUnit(unit_id)
+            unit_data = unit_response.json()
+            log.debug(unit_data)
+            unit_data['published'] = False
+            self.crowdcafe_client.updateUnit(unit_id,unit_data)
+
+
     def createCrowdCafeUnit(self):
         new_unit_response = self.crowdcafe_client.createUnit(self.job_id, {'blank':'yes'})
 
-        unit = new_unit_response.json()
+        unit_data = new_unit_response.json()
         # rename file
-        new_filename = 'inprocess_CCunitid'+str(unit['pk'])+'_'+self.dropboxfile.getFilename()
+        new_filename = 'inprocess_CCunitid'+str(unit_data['pk'])+'_'+self.dropboxfile.getFilename()
         self.dropboxfile.rename(new_filename)
 
         #TODO add url to the image
@@ -55,8 +63,8 @@ class CrowdBoxImage:
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
-        unit['input_data'] = unit_new_data
-        self.crowdcafe_client.updateUnit(unit['pk'],unit)
+        unit_data['input_data'] = unit_new_data
+        self.crowdcafe_client.updateUnit(unit_data['pk'],unit_data)
 '''
 class ImageUnit:
     def __init__(self, dropbox_user):
