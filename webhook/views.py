@@ -29,7 +29,7 @@ def webhook_dropbox(request):
                     if dropboxfile.isImage():
                         crowdboximage = CrowdBoxImage(dropboxfile)
                         if dropboxfile.isDeleted():
-                            log.debug('file '+dropboxfile.getFilename()+' is deleted')
+                            crowdboximage.unpublishCrowdCafeUnit()
                         else:
                             if crowdboximage.checkFilenameStatus():
                                 log.debug(crowdboximage.checkFilenameUnitId)
