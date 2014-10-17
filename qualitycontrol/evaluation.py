@@ -25,6 +25,7 @@ class CanvasPolygon:
                     self.polygon = Polygon(getRectangleCoordinates(shape))
                 if shape['type'] == 'polygon':
                     self.polygon = Polygon(getPolygonPoints(shape))
+        log.debug('canvaspolygon %s',self)
     def isValid(self):
         if '_shapes' in self.data:
             return True
@@ -53,11 +54,15 @@ class CanvasPolygonSimilarity:
 
     def haveSimilarPerimetr(self):
         perimeters = [cp.polygon.getPerimeter() for cp in self.canvaspolygons]
-        return self.getDivergence(perimeters) <= self.threashold['perimetr']
+        divergence = self.getDivergence(perimeters)
+        log.debug('perimetr divergence, %i', divergence)
+        return divergence <= self.threashold['perimetr']
 
     def haveSimilarArea(self):
         areas = [cp.polygon.getArea() for cp in self.canvaspolygons]
-        return self.getDivergence(areas) <= self.threashold['area']
+        divergence = self.getDivergence(areas)
+        log.debug('area divergence, %i', divergence)
+        return divergence <= self.threashold['area']
 
     def haveSimilarCenter(self):
         return True
