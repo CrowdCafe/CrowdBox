@@ -13,34 +13,38 @@ log = logging.getLogger(__name__)
 
 @csrf_exempt
 def webhook_dropbox(request):
-    if 'challenge' in request.GET:
-    	return HttpResponse(request.GET['challenge'])
-    else:
-        if request.body:
-            log.debug(request.body)
-            for uid in json.loads(request.body)['delta']['users']:
-                log.debug(uid)
-                dropboxclient = DropboxClient(uid)
-                updates = dropboxclient.checkUpdates()
-                log.debug(updates)
+    if request.method.type == 'GET':
+        # if it is only a verification request from Dropbox - send back challenge parameter
+        if 'challenge' in request.GET:
+    	    return HttpResponse(request.GET['challenge'])
 
+    elif request.method.type == 'POST':
+        if request.body:
+            # to iterate list of users for whom there are any dropbox updates
+            for uid in json.loads(request.body)['delta']['users']:
+                dropboxclient = DropboxClient(uid)
+                # get the latest updated files for a given user
+                updates = dropboxclient.checkUpdates()
+                log.debug('updates for user %s, are $s',str(uid),updates)
+                # iterate the list of updated files
                 for path, metadata  in updates:
                     dropboxfile = DropboxFile(dropboxclient, path, metadata)
+                    # if updated file is an image
                     if dropboxfile.isImage():
                         crowdboximage = CrowdBoxImage(dropboxfile)
+                        # if was deleted from dropbox - unpublish from CrowdCafe
                         if dropboxfile.isDeleted():
-                            crowdboximage.unpublishCrowdCafeUnit()
+                            crowdboximage.updateCrowdCafeUnit({'published':False})
                         else:
+                            # if the file already was processed and has status in its name
                             if crowdboximage.checkFilenameStatus():
                                 log.debug(crowdboximage.checkFilenameUnitId)
+                            # if file was not processed - create new unit in CrowdCafe
                             else:
                                 crowdboximage.createCrowdCafeUnit()
-                    #dropboxfile = ImageUnit(dbuser)
-                    #dropboxfile.decideWhatToDo(path, metadata)
-                    #crowdcrop.publishImage(path, metadata)
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=405)
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)
 
 def getMediaLink(request, uid):
     if uid and 'path' in request.GET:

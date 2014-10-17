@@ -10,7 +10,6 @@ log = logging.getLogger(__name__)
 from PIL import Image, ImageDraw
 
 
-
 class CrowdBoxImage:
     def __init__(self, dropboxfile):
         self.dropboxfile = dropboxfile
@@ -37,15 +36,23 @@ class CrowdBoxImage:
         log.debug(UnitIdKeyword+' is not in the '+filename)
         return False
 
-    def unpublishCrowdCafeUnit(self):
+    def updateCrowdCafeUnit(self, data_to_update):
         unit_id = self.checkFilenameUnitId()
 
         if unit_id:
             unit_response = self.crowdcafe_client.getUnit(unit_id)
             unit_data = unit_response.json()
-            log.debug(unit_data)
-            unit_data['published'] = False
+            # edit data with updated keys
+            for key in data_to_update.keys():
+                unit_data[key]=data_to_update[key]
+
+            log.debug('unit data: %s', unit_data)
+            # update crowdcafe unit with new data
             self.crowdcafe_client.updateUnit(unit_id,unit_data)
+            return True
+        else:
+            log.debug('unit_id is not in available. update was not done')
+            return False
 
 
     def createCrowdCafeUnit(self):
