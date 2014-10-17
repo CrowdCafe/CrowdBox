@@ -2,7 +2,6 @@ from crowdcafe_client.client import CrowdCafeAPI
 from crowdcafe_client.sdk import Unit
 from marble3d.utils import getFileViaUrl
 from django.conf import settings
-import datetime
 
 import logging
 import numpy
@@ -36,7 +35,6 @@ class CrowdBoxImage:
                 self.unit.pk = unit_id
                 self.unit.get()
                 self.unit.published = False
-                self.unit.deleted = datetime.datetime.now()
                 self.unit.save()
         else:
             # if the file already was processed and has status in its name
