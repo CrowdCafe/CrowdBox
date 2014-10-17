@@ -13,12 +13,12 @@ log = logging.getLogger(__name__)
 
 @csrf_exempt
 def webhook_dropbox(request):
-    if request.method.type == 'GET':
+    if request.method == 'GET':
         # if it is only a verification request from Dropbox - send back challenge parameter
         if 'challenge' in request.GET:
     	    return HttpResponse(request.GET['challenge'])
 
-    elif request.method.type == 'POST':
+    elif request.method == 'POST':
         if request.body:
             # to iterate list of users for whom there are any dropbox updates
             for uid in json.loads(request.body)['delta']['users']:
