@@ -40,7 +40,6 @@ class Judgement:
             return False
 
 
-
     def scalePolygon(self, imagefile):
         width, height = imagefile.size
 

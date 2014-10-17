@@ -1,4 +1,5 @@
 from crowdcafe_client.client import CrowdCafeAPI
+from crowdcafe_client.sdk import Unit
 from marble3d.utils import getFileViaUrl
 from django.conf import settings
 
@@ -13,9 +14,11 @@ from PIL import Image, ImageDraw
 class CrowdBoxImage:
     def __init__(self, dropboxfile):
         self.dropboxfile = dropboxfile
-        self.job_id = settings.CROWDCAFE['job_id']
-        self.crowdcafe_client = CrowdCafeAPI()
+        self.unit = Unit(job_id = settings.CROWDCAFE['job_id'])
 
+        # self.crowdcafe_client = CrowdCafeAPI()
+    # ---------------------------------------------------------
+    # Dropbox related methods
     def checkFilenameStatus(self):
         statuses = ('inprocess','completed')
         for status in statuses:
@@ -23,6 +26,7 @@ class CrowdBoxImage:
                 log.debug(status)
                 return status
         return False
+
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
         UnitIdKeyword = 'ccunitid'
@@ -35,32 +39,14 @@ class CrowdBoxImage:
             return unit_id
         log.debug(UnitIdKeyword+' is not in the '+filename)
         return False
+    # ---------------------------------------------------------
+    # CrowdCafe related methods
 
-    def updateCrowdCafeUnit(self, data_to_update):
-        unit_id = self.checkFilenameUnitId()
+    def createUnit(self):
+        new_unit_response = self.unit.create({'blank':'yes'})
 
-        if unit_id:
-            unit_response = self.crowdcafe_client.getUnit(unit_id)
-            unit_data = unit_response.json()
-            # edit data with updated keys
-            for key in data_to_update.keys():
-                unit_data[key]=data_to_update[key]
-
-            log.debug('unit data: %s', unit_data)
-            # update crowdcafe unit with new data
-            self.crowdcafe_client.updateUnit(unit_id,unit_data)
-            return True
-        else:
-            log.debug('unit_id is not in available. update was not done')
-            return False
-
-
-    def createCrowdCafeUnit(self):
-        new_unit_response = self.crowdcafe_client.createUnit(self.job_id, {'blank':'yes'})
-
-        unit_data = new_unit_response.json()
         # rename file
-        new_filename = 'inprocess_CCunitid'+str(unit_data['pk'])+'_'+self.dropboxfile.getFilename()
+        new_filename = 'inprocess_CCunitid'+str(self.unit.pk)+'_'+self.dropboxfile.getFilename()
         self.dropboxfile.rename(new_filename)
 
         #TODO add url to the image
@@ -70,8 +56,9 @@ class CrowdBoxImage:
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
-        unit_data['input_data'] = unit_new_data
-        self.crowdcafe_client.updateUnit(unit_data['pk'],unit_data)
+        self.unit.input_data = unit_new_data
+        self.unit.save()
+    # ---------------------------------------------------------
 '''
 class ImageUnit:
     def __init__(self, dropbox_user):

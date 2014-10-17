@@ -41,29 +41,7 @@ class CrowdCafeAPI:
         ret = r.json()[field]
         log.debug("%s = %s" % (field, ret))
         return ret
-
-    # Units
-
-    def getUnit(self, unit_id):
-        url = 'unit/' + str(unit_id) + '/'
-        r = self.apiCall('get', url)
-        log.debug("Unit res %s" % r.text)
-        return r
-
-    def createUnit(self, job_id, data):
-        url = 'job/' + str(job_id) + '/unit/'
-        r = self.apiCall('post', url, data)
-        log.debug("Unit res %s" % r.text)
-
-        return r
-
-    def updateUnit(self, unit_id, data_to_update):
-        url = 'unit/' + str(unit_id) + '/'
-        r = self.apiCall('patch', url, data_to_update)
-        log.debug("Unit res %s" % r.text)
-
-        return r
-
+    '''
     # Judgements
 
     def listJudgements(self, unit_id):
@@ -73,3 +51,4 @@ class CrowdCafeAPI:
         log.debug("Judgement result %s" % r.text)
 
         return r
+    '''

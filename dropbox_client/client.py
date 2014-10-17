@@ -26,10 +26,6 @@ class DropboxClient:
 
         self.api = client.DropboxClient(sess)
 
-    # manage webhook requests from dropbox
-    def listen(self):
-        return True
-
     # check updates (files and folders) for a specific user
     def checkUpdates(self):
         log.debug(self)

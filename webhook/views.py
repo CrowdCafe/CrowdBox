@@ -34,14 +34,15 @@ def webhook_dropbox(request):
                         crowdboximage = CrowdBoxImage(dropboxfile)
                         # if was deleted from dropbox - unpublish from CrowdCafe
                         if dropboxfile.isDeleted():
-                            crowdboximage.updateCrowdCafeUnit({'published':False})
+                            crowdboximage.unit.published = False
+                            crowdboximage.unit.save()
                         else:
                             # if the file already was processed and has status in its name
                             if crowdboximage.checkFilenameStatus():
                                 log.debug(crowdboximage.checkFilenameUnitId)
                             # if file was not processed - create new unit in CrowdCafe
                             else:
-                                crowdboximage.createCrowdCafeUnit()
+                                crowdboximage.createUnit()
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
