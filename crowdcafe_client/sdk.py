@@ -4,7 +4,6 @@ from client import CrowdCafeAPI
 import logging
 log = logging.getLogger(__name__)
 
-
 # CrowdCafe Unit API
 # https://github.com/CrowdCafe/crowdcafe/blob/master/api/views.py#L103-L156
 
@@ -80,8 +79,6 @@ class Unit:
     def isGold(self):
         return self.__gold
 
-
-
 # CrowdCafe Judgement API
 # https://github.com/CrowdCafe/crowdcafe/blob/master/api/views.py#L159-L183
 
@@ -109,8 +106,23 @@ class Judgement:
         self.unit_id = data['unit']
         self.output_data = data['output_data']
         self.score = data['score']
-        self.gold = data['gold']
+        self.__gold = data['gold']
+
+    def isGold(self):
+        return self.__gold
 
     #TODO after you have approval at CrowdCafe - implement this method
-    def update(self):
+    def save(self):
         return None
+
+
+class GoldTest:
+    def __init__(self, crowdcafe_webhook_json_data):
+        # we expect to have 2 judgements in json_data: gold and test ones
+        for item in crowdcafe_webhook_json_data:
+            judgement = Judgement()
+            judgement.setAttributes(item)
+            if judgement.isGold():
+                self.gold = judgement
+            else:
+                self.test = judgement

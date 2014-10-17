@@ -3,10 +3,11 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-import json
+
 from crowdcafe_qualitycontrol.judgements import Evaluation, Judgement
 from tasks import processCrowdCafeResult
 
+import json
 
 def home(request):
     return render_to_response('marble3d/home.html', context_instance=RequestContext(request))

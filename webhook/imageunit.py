@@ -1,6 +1,7 @@
 from crowdcafe_client.client import CrowdCafeAPI
 from crowdcafe_client.sdk import Unit
 from marble3d.utils import getFileViaUrl
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 import logging
@@ -26,7 +27,8 @@ class CrowdBoxImage:
                 log.debug(status)
                 return status
         return False
-    def processUpdateFromDropbox(self):
+    # when we receive fileupdate as a webhook from dropbox
+    def processUpdateFromDropbox(self, request):
         # if it was deleted from dropbox
         if self.dropboxfile.isDeleted():
             unit_id = self.checkFilenameUnitId()
@@ -42,7 +44,7 @@ class CrowdBoxImage:
                 log.debug(self.checkFilenameUnitId)
             # if file was not processed - create new unit in CrowdCafe
             else:
-                self.createUnit()
+                self.createUnit(request.build_absolute_url())
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
         UnitIdKeyword = 'ccunitid'
@@ -58,9 +60,10 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # CrowdCafe related methods
 
-    def createUnit(self):
-        new_unit_response = self.unit.create({'blank':'yes'})
+    def createUnit(self, domain):
+        #TODO - check whether I can create a unit with empty inputdata
 
+        self.unit.create({'blank':'yes'})
         # rename file
         new_filename = 'inprocess_CCunitid'+str(self.unit.pk)+'_'+self.dropboxfile.getFilename()
         self.dropboxfile.rename(new_filename)
@@ -72,6 +75,8 @@ class CrowdBoxImage:
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
+        unit_new_data['url'] = domain + reverse('webhook-image-directlink', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path']
+        log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
     # ---------------------------------------------------------
