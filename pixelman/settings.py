@@ -160,6 +160,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'qualitycontrol': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'crowdcafe_client': {
             'handlers': ['console'],
             'level': 'DEBUG',
