@@ -32,7 +32,7 @@ def webhook_dropbox(request):
                     # if updated file is an image
                     if dropboxfile.isImage():
                         crowdboximage = CrowdBoxImage(dropboxfile)
-                        crowdboximage.processUpdateFromDropbox()
+                        crowdboximage.processUpdateFromDropbox(request)
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
