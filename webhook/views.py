@@ -39,7 +39,7 @@ def webhook_dropbox(request):
 
 @csrf_exempt
 def webhook_crowdcafe_goldcontrol(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.body:
         data = json.loads(request.body)
         canvaspolygons = []
         # iterate through data about judgements
