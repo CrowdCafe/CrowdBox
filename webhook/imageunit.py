@@ -26,7 +26,23 @@ class CrowdBoxImage:
                 log.debug(status)
                 return status
         return False
-
+    def processUpdateFromDropbox(self):
+        # if it was deleted from dropbox
+        if self.dropboxfile.isDeleted():
+            unit_id = self.checkFilenameUnitId()
+            # if we can identify unit_id - then unpublish it from CrowdCafe
+            if unit_id:
+                self.unit.pk = unit_id
+                self.unit.get()
+                self.unit.published = False
+                self.unit.save()
+        else:
+            # if the file already was processed and has status in its name
+            if self.checkFilenameStatus():
+                log.debug(self.checkFilenameUnitId)
+            # if file was not processed - create new unit in CrowdCafe
+            else:
+                self.createUnit()
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
         UnitIdKeyword = 'ccunitid'
