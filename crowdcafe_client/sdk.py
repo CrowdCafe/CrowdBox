@@ -4,6 +4,7 @@ from client import CrowdCafeAPI
 import logging
 log = logging.getLogger(__name__)
 
+client = CrowdCafeAPI()
 
 # CrowdCafe Unit API
 # https://github.com/CrowdCafe/crowdcafe/blob/master/api/views.py#L103-L156
@@ -14,12 +15,12 @@ class Unit:
     def __init__(self, pk = None, job_id = None):
         self.pk = pk
         self.job_id = job_id
-        self.__client = CrowdCafeAPI()
+        self.
 
     def create(self, input_data):
         if not self.pk and self.job_id:
             url = 'job/' + str(self.job_id) + '/unit/'
-            r = self.__client('post', url, input_data)
+            r = client('post', url, input_data)
             log.debug("Unit res %s" % r.text)
             self.setAttributes(r.json())
         else:
@@ -29,7 +30,7 @@ class Unit:
     def get(self):
         if self.pk:
             url = 'unit/' + str(self.pk) + '/'
-            r = self.__client('get', url)
+            r = client('get', url)
             log.debug("Unit res %s" % r.text)
             self.setAttributes(r.json())
         else:
@@ -38,7 +39,7 @@ class Unit:
     def save(self):
         if self.pk:
             url = 'unit/' + str(self.pk) + '/'
-            r = self.__client('patch', url, self.serialize())
+            r = client('patch', url, self.serialize())
             log.debug("Unit res %s" % r.text)
             self.setAttributes(r.json())
         else:
@@ -55,7 +56,7 @@ class Unit:
         }
     def judgements(self):
         url = 'unit/' + str(self.pk) + '/judgement/'
-        r = self.__client('get', url)
+        r = client('get', url)
         log.debug("Judgement result %s" % r.text)
         judgements = []
 
@@ -89,11 +90,10 @@ class Judgement:
     def __init__(self, pk = None, unit_id = None):
         self.pk = pk
         self.unit_id = unit_id
-        self.__client = CrowdCafeAPI()
 
     def get(self):
         url = 'unit/' + str(self.unit_id) + '/judgement/'+ str(self.pk)
-        r = self.__client('get', url)
+        r = client('get', url)
 
         log.debug("Judgement result %s" % r.text)
         return r
