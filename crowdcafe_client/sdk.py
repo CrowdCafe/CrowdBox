@@ -14,7 +14,7 @@ class Unit:
     def __init__(self, pk = None, job_id = None):
         self.pk = pk
         self.job_id = job_id
-        self.
+        self.__client = CrowdCafeAPI()
 
     def create(self, input_data):
         if not self.pk and self.job_id:
