@@ -25,7 +25,7 @@ def webhook_dropbox(request):
                 dropboxclient = DropboxClient(uid)
                 # get the latest updated files for a given user
                 updates = dropboxclient.checkUpdates()
-                log.debug('updates for user %s, are $s',str(uid),updates)
+                log.debug('updates for user %s, are %s',str(uid),updates)
                 # iterate the list of updated files
                 for path, metadata  in updates:
                     dropboxfile = DropboxFile(dropboxclient, path, metadata)
