@@ -44,7 +44,7 @@ class CrowdBoxImage:
                 log.debug(self.checkFilenameUnitId)
             # if file was not processed - create new unit in CrowdCafe
             else:
-                self.createUnit(request.build_absolute_url())
+                self.createUnit(request)
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
         UnitIdKeyword = 'ccunitid'
@@ -60,7 +60,7 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # CrowdCafe related methods
 
-    def createUnit(self, domain):
+    def createUnit(self, request):
         #TODO - check whether I can create a unit with empty inputdata
 
         self.unit.create({'blank':'yes'})
@@ -75,7 +75,7 @@ class CrowdBoxImage:
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
-        unit_new_data['url'] = domain + reverse('webhook-image-directlink', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path']
+        unit_new_data['url'] = request.build_absolute_uri(reverse('webhook-image-directlink', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
