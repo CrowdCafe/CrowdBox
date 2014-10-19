@@ -65,24 +65,29 @@ def webhook_crowdcafe_goldcontrol(request):
 def webhook_crowdcafe_newjudgement(request):
     if request.method == 'POST' and request.body:
         log.debug('request body: %s', request.body)
+        # we received list of judgements data
         data = json.loads(request.body)
-        # get judgement
-        judgement = Judgement()
-        judgement.setAttributes(data)
-        # get unit
-        unit = judgement.unit()
-        # if this unit is not gold
-        if not unit.isGold():
-            # get all judgements
-            judgements = unit.judgements()
-            # search for agreement among judgements
-            agreement = findAgreement(judgements)
-            if agreement:
-                log.debug('agreement is found, %s',agreement)
-                #createImage(agreement)
-                #approveJudgements(agreement)
-            else:
-                log.debug('agreement was not found')
+        for item in data:
+            # get judgement
+            judgement = Judgement()
+            judgement.setAttributes(item)
+            # get unit
+            unit = judgement.unit()
+            # if this unit is not gold
+            if not unit.isGold():
+                # get all judgements
+                judgements = unit.judgements()
+                # search for agreement among judgements
+                agreement = findAgreement(judgements)
+                if agreement:
+                    log.debug('agreement is found, %s',agreement)
+                    #createImage(agreement)
+                    #approveJudgements(agreement)
+                else:
+                    log.debug('agreement was not found')
+                    #update unit status as not completed
+                    unit.status = 'NC'
+                    unit.save()
         return HttpResponse(status=200)
     return HttpResponse(status=405)
 
