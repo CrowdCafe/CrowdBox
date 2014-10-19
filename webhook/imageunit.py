@@ -93,14 +93,18 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # Image processing
     def getCroppedImage(self, agreement):
+
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
         judgement = agreement[0]
         canvaspolygon = CanvasPolygon(judgement)
         cropped_image = cropByPolygon(original_image,canvaspolygon.polygon.getSequence())
         return cropped_image
+
     def saveCroppedImage(self,image):
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
+        log.debug(path)
         self.dropboxfile.client.put_file(path, image)
+
     # ---------------------------------------------------------
 '''
 class ImageUnit:

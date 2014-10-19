@@ -82,8 +82,8 @@ def webhook_crowdcafe_newjudgement(request):
                     log.debug('agreement is found, %s',agreement)
                     # ------------------------------------
                     crowdboximage = CrowdBoxImage(unit = unit)
-
-
+                    image = crowdboximage.getCroppedImage(agreement)
+                    crowdboximage.saveCroppedImage(image)
                     # createImage(agreement)
                     # ------------------------------------
                 else:
