@@ -59,7 +59,6 @@ class CrowdBoxImage:
         return False
     # ---------------------------------------------------------
     # CrowdCafe related methods
-
     def createUnit(self, request):
         #TODO - check whether I can create a unit with empty inputdata
 
@@ -79,6 +78,7 @@ class CrowdBoxImage:
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
+
     # ---------------------------------------------------------
 '''
 class ImageUnit:

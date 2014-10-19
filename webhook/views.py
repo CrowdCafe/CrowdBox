@@ -7,8 +7,9 @@ from django.shortcuts import redirect
 
 from dropbox_client.client import DropboxClient, DropboxFile
 from crowdcafe_client.sdk import Judgement
-from qualitycontrol.evaluation import CanvasPolygon, CanvasPolygonSimilarity
+from qualitycontrol.evaluation import CanvasPolygon, CanvasPolygonSimilarity, findAgreement
 from imageunit import CrowdBoxImage
+import itertools
 
 log = logging.getLogger(__name__)
 
@@ -60,8 +61,35 @@ def webhook_crowdcafe_goldcontrol(request):
     else:
         return HttpResponse(status=405)
 
-def getMediaLink(request, uid):
-    if uid and 'path' in request.GET:
+@csrf_exempt
+def webhook_crowdcafe_newjudgement(request):
+    if request.method == 'POST' and request.body:
+        log.debug('request body: %s', request.body)
+        data = json.loads(request.body)
+        # get judgement
+        judgement = Judgement()
+        judgement.setAttributes(data)
+        # get unit
+        unit = judgement.unit()
+        # if this unit is not gold
+        if not unit.isGold():
+            # get all judgements
+            judgements = unit.judgements()
+            # search for agreement among judgements
+            agreement = findAgreement(judgements)
+            if agreement:
+                log.debug('agreement is found, %s',agreement)
+                #createImage(agreement)
+                #approveJudgements(agreement)
+            else:
+                log.debug('agreement was not found')
+        return HttpResponse(status=200)
+    return HttpResponse(status=405)
+
+# return thumbmail of an image from dropbox with a given path
+
+def getThumbnail(request, uid):
+    if 'path' in request.GET:
         path = request.GET['path']
         dropboxclient = DropboxClient(uid)
         thumbnail = dropboxclient.getThumbnail(path)

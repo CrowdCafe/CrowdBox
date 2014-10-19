@@ -9,7 +9,7 @@ from django.conf import settings
 from crowdcafe_client.sdk import Judgement
 from shapes.coordinates import getRectangleCoordinates, getPolygonPoints, getCanvasSize
 from shapes.polygons import Polygon
-
+import itertools
 
 class CanvasPolygon:
     def __init__(self, judgement):
@@ -32,6 +32,19 @@ class CanvasPolygon:
         else:
             return False
 
+def findAgreement(judgements):
+    # if judgements are 2 and more, else do nothing
+    if len(judgements) > 1:
+        # get all the possible combinations of existing judgements
+        pairs = list(itertools.combinations(judgements, 2))
+        # search similar pairs of similar judgements:
+        for pair in pairs:
+            canvaspolygons = [CanvasPolygon(pair[0]),CanvasPolygon(pair[1])]
+            test = CanvasPolygonSimilarity(canvaspolygons)
+            if test.areSimilar():
+                # return 2 judgements which are similar to each other (agreement)
+                return pair
+    return None
 
 class CanvasPolygonSimilarity:
     def __init__(self, canvaspolygons):
