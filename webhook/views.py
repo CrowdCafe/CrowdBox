@@ -64,8 +64,7 @@ def getMediaLink(request, uid):
     if uid and 'path' in request.GET:
         path = request.GET['path']
         dropboxclient = DropboxClient(uid)
-        thumbnail_httpresponse = dropboxclient.getThumbnail(path)
-        log.debug('thumbnail %s', thumbnail_httpresponse.read())
-        return thumbnail_httpresponse.read()
+        thumbnail = dropboxclient.getThumbnail(path)
+        return HttpResponse(thumbnail.read(), mimetype="image/jpeg")
     else:
         return HttpResponse(status=404)
