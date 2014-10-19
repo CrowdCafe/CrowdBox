@@ -46,7 +46,7 @@ class DropboxClient:
     # upload a new file to a specific folder
     def getDirectLink(self, path):
         return self.api.media(path)
-    def getMetadata(self,path):
+    def getMetadata(self,path, include_media_info = True):
         return self.api.metadata(path)
     def uploadFile(self, file_to_upload, path, file_type_for_buffer = None):
         buffer = file_to_upload
@@ -172,6 +172,7 @@ class DropboxFile:
         path = self.getPath()
         log.debug('retrieve metadata for '+path)
         self.metadata = self.client.getMetadata(path)
+
     def getMediaURL(self):
         media = self.client.getDirectLink(self.path)
         return media['url']
