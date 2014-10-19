@@ -103,7 +103,7 @@ class CrowdBoxImage:
     def saveCroppedImage(self,image):
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
         log.debug(path)
-        self.dropboxfile.client.put_file(path, image)
+        self.dropboxfile.client.api.put_file(path, image)
 
     # ---------------------------------------------------------
 '''
