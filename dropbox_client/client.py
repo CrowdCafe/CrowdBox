@@ -54,7 +54,8 @@ class DropboxClient:
             buffer = StringIO()
             file_to_upload.save(buffer, file_type_for_buffer)
         return self.user.client.put_file(path, buffer)
-
+    def getThumbnail(self, path, size = 'l', format = "JPEG"):
+        return self.api.thumbnail(path, size, format)
         # rename folder
         # def renameFolder(self, path, name):
         # return True
@@ -171,7 +172,6 @@ class DropboxFile:
         path = self.getPath()
         log.debug('retrieve metadata for '+path)
         self.metadata = self.client.getMetadata(path)
-
     def getMediaURL(self):
         media = self.client.getDirectLink(self.path)
         return media['url']
