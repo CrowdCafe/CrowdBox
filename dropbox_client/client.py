@@ -170,8 +170,9 @@ class DropboxFile:
 
     def updateMetadata(self):
         path = self.getPath()
-        log.debug('retrieve metadata for '+path)
-        self.metadata = self.client.getMetadata(path)
+        metadata = self.client.getMetadata(path)
+        log.debug('retrieve metadata for %s,: %s ',path,metadata)
+        self.metadata = metadata
 
     def getMediaURL(self):
         media = self.client.getDirectLink(self.path)
