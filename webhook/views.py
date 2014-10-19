@@ -9,7 +9,6 @@ from dropbox_client.client import DropboxClient, DropboxFile
 from crowdcafe_client.sdk import Judgement
 from qualitycontrol.evaluation import CanvasPolygon, CanvasPolygonSimilarity, findAgreement
 from imageunit import CrowdBoxImage
-import itertools
 
 log = logging.getLogger(__name__)
 
@@ -29,10 +28,10 @@ def webhook_dropbox(request):
                 log.debug('updates for user %s, are %s',str(uid),updates)
                 # iterate the list of updated files
                 for path, metadata  in updates:
-                    dropboxfile = DropboxFile(dropboxclient, path, metadata)
+                    dropboxfile = DropboxFile(dropboxclient, path)
                     # if updated file is an image
                     if dropboxfile.isImage():
-                        crowdboximage = CrowdBoxImage(dropboxfile)
+                        crowdboximage = CrowdBoxImage(dropboxfile = dropboxfile)
                         crowdboximage.processUpdateFromDropbox(request)
         return HttpResponse(status=200)
     else:
@@ -81,8 +80,12 @@ def webhook_crowdcafe_newjudgement(request):
                 agreement = findAgreement(judgements)
                 if agreement:
                     log.debug('agreement is found, %s',agreement)
-                    #createImage(agreement)
-                    #approveJudgements(agreement)
+                    # ------------------------------------
+                    crowdboximage = CrowdBoxImage(unit = unit)
+
+
+                    # createImage(agreement)
+                    # ------------------------------------
                 else:
                     log.debug('agreement was not found')
                     #update unit status as not completed
@@ -91,7 +94,7 @@ def webhook_crowdcafe_newjudgement(request):
         return HttpResponse(status=200)
     return HttpResponse(status=405)
 
-# return thumbmail of an image from dropbox with a given path
+# return thumbnail of an image from dropbox with a given path
 
 def getThumbnail(request, uid):
     if 'path' in request.GET:

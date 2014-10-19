@@ -1,25 +1,37 @@
 from crowdcafe_client.client import CrowdCafeAPI
 from crowdcafe_client.sdk import Unit
-from marble3d.utils import getFileViaUrl
 from django.core.urlresolvers import reverse
 from django.conf import settings
-
+from dropbox_client.client import DropboxClient,DropboxFile
+from image_processing.image_pro import getImageViaUrl,cropByPolygon
+from qualitycontrol.evaluation import CanvasPolygon
 import logging
-import numpy
+import json
 
 log = logging.getLogger(__name__)
 
-from PIL import Image, ImageDraw
+
 
 
 class CrowdBoxImage:
-    def __init__(self, dropboxfile):
-        self.dropboxfile = dropboxfile
-        self.unit = Unit(job_id = settings.CROWDCAFE['job_id'])
+    def __init__(self, dropboxfile = None, unit = Unit(job_id = settings.CROWDCAFE['job_id'])):
 
-        # self.crowdcafe_client = CrowdCafeAPI()
+        self.dropboxfile = dropboxfile
+        self.unit = unit
+        if not self.dropboxfile:
+            self.getDropboxFile()
     # ---------------------------------------------------------
     # Dropbox related methods
+    def getDropboxFile(self):
+        if self.unit['pk']:
+            input_data = json.loads(self.unit['input_data'])
+            log.debug('input data: %s',input_data)
+            dropboxclient = DropboxClient(input_data['uid'])
+            dropboxfile = DropboxFile(dropboxclient, input_data['uid'])
+            if dropboxfile.isImage():
+                self.dropboxfile = dropboxfile
+        else:
+            log.debug('unit is not set')
     def checkFilenameStatus(self):
         statuses = ('inprocess','completed')
         for status in statuses:
@@ -78,7 +90,17 @@ class CrowdBoxImage:
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
-
+    # ---------------------------------------------------------
+    # Image processing
+    def getCroppedImage(self, agreement):
+        original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
+        judgement = agreement[0]
+        canvaspolygon = CanvasPolygon(judgement)
+        cropped_image = cropByPolygon(original_image,canvaspolygon.polygon.getSequence())
+        return cropped_image
+    def saveCroppedImage(self,image):
+        path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
+        self.dropboxfile.client.put_file(path, image)
     # ---------------------------------------------------------
 '''
 class ImageUnit:

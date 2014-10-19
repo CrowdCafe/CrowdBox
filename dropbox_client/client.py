@@ -43,76 +43,33 @@ class DropboxClient:
         return updates
     def getUid(self):
         return self.uid
+
     # upload a new file to a specific folder
-    def getDirectLink(self, path):
+    def getMedia(self, path):
         return self.api.media(path)
+
     def getMetadata(self,path, include_media_info = True):
         return self.api.metadata(path, include_media_info = include_media_info)
+
     def uploadFile(self, file_to_upload, path, file_type_for_buffer = None):
         buffer = file_to_upload
         if file_type_for_buffer:
             buffer = StringIO()
             file_to_upload.save(buffer, file_type_for_buffer)
         return self.user.client.put_file(path, buffer)
+
     def getThumbnail(self, path, size = 'l', format = "JPEG"):
         return self.api.thumbnail(path, size, format)
         # rename folder
         # def renameFolder(self, path, name):
         # return True
 
-
-'''
-        This is how the metadata looks like
-        {
-            u'revision': 32,
-            u'bytes': 614040,
-            u'thumb_exists': True,
-            u'rev': u'202b999c17',
-            u'modified': u'Thu,
-            16Oct201414: 18: 42+0000',
-            u'mime_type': u'image/jpeg',
-            u'path': u'/Testonly/Block-2B-Wet(6)(1)copy15.jpg',
-            u'is_dir': False,
-            u'size': u'599.6KB',
-            u'root': u'app_folder',
-            u'client_mtime': u'Thu,
-            09Oct201416: 36: 54+0000',
-            u'icon': u'page_white_picture'
-        }
-        {
-            u'is_deleted': True,
-            u'revision': 34,
-            u'bytes': 0,
-            u'thumb_exists': True,
-            u'rev': u'222b999c17',
-            u'modified': u'Thu,
-            16Oct201414: 20: 37+0000',
-            u'mime_type': u'image/jpeg',
-            u'path': u'/Testonly/Block-2B-Wet(6)(1)copy14.jpg',
-            u'photo_info': {
-                u'lat_long': None,
-                u'time_taken': None
-            },
-            u'is_dir': False,
-            u'size': u'0bytes',
-            u'root': u'app_folder',
-            u'client_mtime': u'Wed,
-            31Dec196923: 59: 59+0000',
-            u'icon': u'page_white_picture'
-        }
-'''
-
 class DropboxFile:
-    def __init__(self, dropbox_client, path, metadata):
+    def __init__(self, dropbox_client, path):
         self.client = dropbox_client
         self.path = path
         self.updateMetadata()
 
-        #log.debug('path:')
-        #log.debug(self.path)
-
-        #log.debug('metadata:')
-        #log.debug(self.metadata)
 
     def getPath(self):
         return self.path

@@ -170,6 +170,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'image_processing': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'webhook': {
             'handlers': ['console'],
             'level': 'DEBUG',
