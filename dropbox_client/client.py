@@ -132,5 +132,5 @@ class DropboxFile:
         self.metadata = metadata
 
     def getMediaURL(self):
-        media = self.client.getDirectLink(self.path)
+        media = self.client.getMedia(self.path)
         return media['url']
