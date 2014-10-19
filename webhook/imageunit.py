@@ -23,7 +23,7 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # Dropbox related methods
     def getDropboxFile(self):
-        if self.unit['pk']:
+        if self.unit.pk:
             input_data = json.loads(self.unit['input_data'])
             log.debug('input data: %s',input_data)
             dropboxclient = DropboxClient(input_data['uid'])
