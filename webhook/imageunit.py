@@ -26,8 +26,8 @@ class CrowdBoxImage:
         if self.unit.pk:
             input_data = self.unit.input_data
             log.debug('input data: %s',input_data)
-            dropboxclient = DropboxClient(input_data['uid'])
-            dropboxfile = DropboxFile(dropboxclient, input_data['uid'])
+            dropboxclient = DropboxClient(int(input_data['uid']))
+            dropboxfile = DropboxFile(dropboxclient, input_data['path'])
             if dropboxfile.isImage():
                 self.dropboxfile = dropboxfile
         else:
