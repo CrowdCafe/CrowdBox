@@ -86,8 +86,7 @@ class CrowdBoxImage:
         self.unit.input_data = unit_new_data
         self.unit.save()
     # ---------------------------------------------------------
-    # Result preparation
-
+    # Image processing
     def getScaledPolygon(self, original_image, canvaspolygon):
         width, height = original_image.size
         canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['width'],1.0*height/canvaspolygon.canvas['height'])
@@ -95,18 +94,3 @@ class CrowdBoxImage:
 
     def getMaskPoints(self,canvaspolygon):
         return canvaspolygon.polygon.getSequence()
-
-    def processResult(self, judgement):
-        # get original image
-        original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
-        # select judgement based on which to cut image
-        canvaspolygon = CanvasPolygon(judgement.output_data)
-        # scale polygon of the judgement
-        canvaspolygon = self.getScaledPolygon(original_image, canvaspolygon)
-        # add margins to polygon
-        canvaspolygon.polygon.enlargeAbs(settings.MARBLE_3D_ENLARGE_POLYGON)
-        # get Mask points
-        mask_points = self.getMaskPoints(canvaspolygon)
-
-        corners = canvaspolygon.polygon.getCorners()
-        return self.dropboxfile, original_image, mask_points, corners

@@ -28,8 +28,7 @@ def processCrowdCafeNewJudgement(request):
                 crowdboximage = CrowdBoxImage(unit = unit)
                 # pick correct judgement (any from agreement)
                 judgement = agreement[0]
-                result = crowdboximage.processResult(judgement)
-                makeOutputFromTaskResult(result)
+                makeOutputFromTaskResult(crowdboximage,judgement)
                 #update unit status as completed
                 unit.status = 'CD'
             else:
