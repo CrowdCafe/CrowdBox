@@ -3,7 +3,7 @@ from crowdcafe_client.sdk import Unit
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from dropbox_client.client import DropboxClient,DropboxFile
-from image_processing.image_pro import getImageViaUrl,cropByPolygon
+from image_processing.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
 from qualitycontrol.evaluation import CanvasPolygon
 import logging
 import json
@@ -92,18 +92,41 @@ class CrowdBoxImage:
         self.unit.save()
     # ---------------------------------------------------------
     # Image processing
-    def getCroppedImage(self, agreement):
+    def getScaledPolygon(self, original_image, canvaspolygon):
+        width, height = original_image.size
+        canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['width'],1.0*height/canvaspolygon.canvas['height'])
+        return canvaspolygon
 
+    def getMaskPoints(self,canvaspolygon):
+        return canvaspolygon.polygon.getSequence()
+
+    def getCroppedImage(self, agreement):
+        # get original image
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
+        # select judgement based on which to cut image
         judgement = agreement[0]
         canvaspolygon = CanvasPolygon(judgement)
-        cropped_image = cropByPolygon(original_image,canvaspolygon.polygon.getSequence())
-        return cropped_image
+        # scale polygon of the judgement
+        canvaspolygon = self.getScaledPolygon(original_image, canvaspolygon)
+        # get Mask points
+        mask_points = self.getMaskPoints(canvaspolygon)
+        # create mask image
+        mask = maskImage(original_image,mask_points)
+        # get corners points of the polygon
+        corners = canvaspolygon.polygon.getCorners()
+        # crop mask by the corner points
+        mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
+        # place on background
+        result_image = placeMaskOnBackground(mask)
+        # save image to dropbox
+        self.saveCroppedImage(result_image)
+
 
     def saveCroppedImage(self,image):
+        buffer = bufferImage(image,"JPEG")
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
         log.debug(path)
-        self.dropboxfile.client.api.put_file(path, image)
+        self.dropboxfile.client.api.put_file(path, buffer)
 
     # ---------------------------------------------------------
 '''

@@ -8,7 +8,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
-def cropByPolygon(original_image, polygon_points):
+def maskImage(original_image, mask_points):
 
     # read image as RGB and add alpha (transparency)
     im = original_image.convert("RGBA")
@@ -18,7 +18,7 @@ def cropByPolygon(original_image, polygon_points):
     maskIm = Image.new('L', (imArray.shape[1], imArray.shape[0]), 0)
     #polygon_points = self.polygon.offset(settings.MARBLE_3D_ENLARGE_POLYGON)
 
-    ImageDraw.Draw(maskIm).polygon(polygon_points, outline=1, fill=1)
+    ImageDraw.Draw(maskIm).polygon(mask_points, outline=1, fill=1)
     mask = numpy.array(maskIm)
     # assemble new image (uint8: 0-255)
     newImArray = numpy.empty(imArray.shape,dtype='uint8')
@@ -29,17 +29,31 @@ def cropByPolygon(original_image, polygon_points):
 
     # back to Image from numpy
     result_image = Image.fromarray(newImArray, "RGBA") #RGBA
-    # Crop the image
     '''
+    # Crop the image
+
     corners = self.polygon.getCorners()
     self.image = self.image.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
     # Create an image with green background and place image on it
     bg = Image.new("RGB", self.image.size, (0,255,0))
     bg.paste(self.image,self.image)
     self.image = bg
-    '''
+
     buffer = StringIO()
     result_image.save(buffer, "JPEG")
+    return buffer
+    '''
+    return result_image
+
+def placeMaskOnBackground(original_image, color = (0,255,0)):
+    # Create an image with green background and place image on it
+    bg = Image.new("RGB", original_image.size, color)
+    bg.paste(original_image,original_image)
+    return bg
+
+def bufferImage(original_image, format="JPEG"):
+    buffer = StringIO()
+    original_image.save(buffer, format)
     return buffer
 
 def getImageViaUrl(url):
