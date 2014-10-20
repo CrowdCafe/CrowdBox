@@ -4,6 +4,7 @@ from django.conf import settings
 from dropbox_client.client import DropboxClient,DropboxFile
 from image_processing.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
 from qualitycontrol.evaluation import CanvasPolygon
+import pyexiv2
 import logging
 
 log = logging.getLogger(__name__)
@@ -99,6 +100,9 @@ class CrowdBoxImage:
     def processAgreement(self, agreement):
         # get original image
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
+
+        original_image.save(self.dropboxfile.getFilename())
+
         # read exif data
         exif_data = original_image._getexif()
         log.debug('original exif data: %s',exif_data)
@@ -120,9 +124,21 @@ class CrowdBoxImage:
         # place on background
         result_image = placeMaskOnBackground(mask)
         # add EXIV data to the result_image
-        exiv_data = self.dropboxfile.metadata['photo_info']
-        log.debug('existing exiv data:%s',exiv_data)
-        result_image.info = exif_data
+        #exiv_data = self.dropboxfile.metadata['photo_info']
+        #log.debug('existing exiv data:%s',exiv_data)
+        #result_image.info = exif_data
+        result_image.save(self.dropboxfile.getFilename()+'_result')
+
+        m1 = pyexiv2.ImageMetadata( self.dropboxfile.getFilename() )
+        m1.read()
+        # modify tags ...
+        # m1['Exif.Image.Key'] = pyexiv2.ExifTag('Exif.Image.Key', 'value')
+        m1.modified = True # not sure what this is good for
+        m2 = pyexiv2.metadata.ImageMetadata( self.dropboxfile.getFilename()+'_result' )
+        m2.read() # yes, we need to read the old stuff before we can overwrite it
+        m1.copy( m2 )
+        m2.write()
+
         # place image in buffer
         buffer = bufferImage(result_image)
         # define path for locating image in dropbox

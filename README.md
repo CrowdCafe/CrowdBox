@@ -13,3 +13,6 @@ With PixelMan you can process your image files using micro-tasking platform http
 4. Images are sent to CrowdCafe as tasks to be cropped
 5. App creates crop images based on workers judgements from CrowdCafe
 6. App uploads crop images into the "Completed" folder inside of the source folder
+
+## Installation details
+http://tilloy.net/dev/pyexiv2/developers.html#getting-the-code

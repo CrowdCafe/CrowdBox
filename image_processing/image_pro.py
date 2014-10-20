@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw
 import requests
 from StringIO import StringIO
 import logging
+import pyexiv2
 
 log = logging.getLogger(__name__)
 
@@ -59,3 +60,4 @@ def bufferImage(original_image, format="JPEG"):
 def getImageViaUrl(url):
 	response = requests.get(url)
 	return Image.open(StringIO(response.content))
+def copyEXIF(from_image,to_image):
