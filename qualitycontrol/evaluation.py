@@ -12,8 +12,8 @@ from shapes.polygons import Polygon, Edge
 import itertools
 
 class CanvasPolygon:
-    def __init__(self, judgement):
-        self.data = judgement.output_data
+    def __init__(self, data):
+        self.data = data
         # self.polygon
         # self.canvas
         if self.isValid():
@@ -25,7 +25,6 @@ class CanvasPolygon:
                     self.polygon = Polygon(getRectangleCoordinates(shape))
                 if shape['type'] == 'polygon':
                     self.polygon = Polygon(getPolygonPoints(shape))
-        log.debug('canvaspolygon %s',self)
     def isValid(self):
         if '_shapes' in self.data:
             return True
@@ -39,7 +38,7 @@ def findAgreement(judgements):
         pairs = list(itertools.combinations(judgements, 2))
         # search similar pairs of similar judgements:
         for pair in pairs:
-            canvaspolygons = [CanvasPolygon(pair[0]),CanvasPolygon(pair[1])]
+            canvaspolygons = [CanvasPolygon(pair[0].output_data),CanvasPolygon(pair[1].output_data)]
             test = CanvasPolygonSimilarity(canvaspolygons)
             if test.areSimilar():
                 # return 2 judgements which are similar to each other (agreement)
@@ -55,10 +54,13 @@ class CanvasPolygonSimilarity:
     def areSimilar(self):
         # bring polygons to one scale:
         for canvaspolygon in self.canvaspolygons:
+            log.debug('polygon points: %s',canvaspolygon.polygon.points)
+            log.debug('canvas info: %s',canvaspolygon.canvas)
             width = 800
             height = 600
             canvaspolygon.polygon.scale(1.0 * width / canvaspolygon.canvas['width'], 1.0 * height / canvaspolygon.canvas['height'])
-
+            log.debug('polygon points: %s',canvaspolygon.polygon.points)
+            log.debug('canvas info: %s',canvaspolygon.canvas)
         # check if their Perimetr, Area and Center are similar
         if self.haveSimilarPerimetr() and self.haveSimilarArea() and self.haveSimilarCenter():
             return True

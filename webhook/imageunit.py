@@ -101,7 +101,7 @@ class CrowdBoxImage:
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
         # select judgement based on which to cut image
         judgement = agreement[0]
-        canvaspolygon = CanvasPolygon(judgement)
+        canvaspolygon = CanvasPolygon(judgement.output_data)
         # scale polygon of the judgement
         canvaspolygon = self.getScaledPolygon(original_image, canvaspolygon)
         # add margins to polygon

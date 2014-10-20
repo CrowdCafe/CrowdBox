@@ -60,7 +60,7 @@ class Polygon:
         }
 
     def getScaled(self, multiplier_x, multiplier_y):  # multiplier x and y
-        return [{'x': 1.0 * point['x'] * multiplier_x, 'y': 1.0 * point['y'] * multiplier_y} for point in self.points]
+        return [{'x': round(1.0 * point['x'] * multiplier_x,0), 'y': round(1.0 * point['y'] * multiplier_y,0)} for point in self.points]
 
     def scale(self, multiplier_x, multiplier_y):  # multiplier x and y
         self.points = self.getScaled(multiplier_x, multiplier_y)
