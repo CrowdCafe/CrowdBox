@@ -145,4 +145,5 @@ class CrowdBoxImage:
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
         log.debug('path of the new cropped image, %s',path)
         # paste buffer to dropbox
-        self.dropboxfile.client.api.put_file(path, buffer)
+        f = open('_result'+self.dropboxfile.getFilename(), 'rb')
+        self.dropboxfile.client.api.put_file(path, f)
