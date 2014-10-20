@@ -1,4 +1,3 @@
-from crowdcafe_client.client import CrowdCafeAPI
 from crowdcafe_client.sdk import Unit
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -6,12 +5,8 @@ from dropbox_client.client import DropboxClient,DropboxFile
 from image_processing.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
 from qualitycontrol.evaluation import CanvasPolygon
 import logging
-import json
 
 log = logging.getLogger(__name__)
-
-
-
 
 class CrowdBoxImage:
     def __init__(self, dropboxfile = None, unit = Unit(job_id = settings.CROWDCAFE['job_id'])):
@@ -100,7 +95,7 @@ class CrowdBoxImage:
     def getMaskPoints(self,canvaspolygon):
         return canvaspolygon.polygon.getSequence()
 
-    def getCroppedImage(self, agreement):
+    def processAgreement(self, agreement):
         # get original image
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
         # select judgement based on which to cut image
@@ -109,7 +104,7 @@ class CrowdBoxImage:
         # scale polygon of the judgement
         canvaspolygon = self.getScaledPolygon(original_image, canvaspolygon)
         # add margins to polygon
-		canvaspolygon.polygon.enlargeAbs(settings.MARBLE_3D_ENLARGE_POLYGON)
+        canvaspolygon.polygon.enlargeAbs(settings.MARBLE_3D_ENLARGE_POLYGON)
         # get Mask points
         mask_points = self.getMaskPoints(canvaspolygon)
         # create mask image
@@ -120,72 +115,8 @@ class CrowdBoxImage:
         mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
         # place on background
         result_image = placeMaskOnBackground(mask)
-        # save image to dropbox
-        self.saveCroppedImage(result_image)
-
-
-    def saveCroppedImage(self,image):
-        #buffer = bufferImage(image,"JPEG")
+        # define path for locating image in dropbox
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
-        log.debug(path)
-        self.dropboxfile.client.api.put_file(path, image)
-
-    # ---------------------------------------------------------
-'''
-class ImageUnit:
-    def __init__(self, dropbox_user):
-        self.dropbox_user = dropbox_user
-        self.job_id = 8
-        self.rockpearl_url = 'http://crowdcrop.crowdcafe.io/'
-
-
-
-    def makeCroppedImage(self, original_image, judgement):
-        # read image as RGB and add alpha (transparency)
-        im = original_image.convert("RGBA")  # imagefile.convert("RGBA")
-        # convert to numpy (for convenience)
-        imArray = numpy.asarray(im)
-        # create mask
-        maskIm = Image.new('L', (imArray.shape[1], imArray.shape[0]), 0)
-        # polygon_points = self.polygon.offset(settings.MARBLE_3D_ENLARGE_POLYGON)
-        polygon_points = judgement.polygon.getSequence()
-        log.debug(polygon_points)
-
-        ImageDraw.Draw(maskIm).polygon(polygon_points, outline=1, fill=1)
-        mask = numpy.array(maskIm)
-        # assemble new image (uint8: 0-255)
-        newImArray = numpy.empty(imArray.shape, dtype='uint8')
-        # colors (three first columns, RGB)
-        newImArray[:, :, :3] = imArray[:, :, :3]
-        # transparency (4th column)
-        newImArray[:, :, 3] = mask * 255
-
-
-        # back to Image from numpy
-        cropped_image = Image.fromarray(newImArray, "RGBA")  # RGBA
-        # Crop the image
-        corners = judgement.polygon.getCorners()
-        cropped_image = cropped_image.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
-        # Create an image with green background and place image on it
-        bg = Image.new("RGB", cropped_image.size, (0, 255, 0))
-        bg.paste(cropped_image, cropped_image)
-        return bg
-
-    def uploadCroppedImage(self, cropped_image, path):
-        return self.dropbox_user.uploadFile(cropped_image, path, 'JPEG')
-
-    def getOriginalImage(self, input_data):
-        return getFileViaUrl(input_data['url'])
-
-
-
-    def getUnitIdByPath(self, path):
-        key = 'inprogress_'
-        filename = path[path.rfind('/') + 1:len(path)]
-        if key in filename:
-            filename_left = filename[len(key), len(filename)]
-            return int(filename_left[0:filename_left.lfind('_')])
-        else:
-            return None
-
-'''
+        log.debug('path of the new cropped image, %s',path)
+        # save image to dropbox
+        self.dropboxfile.client.api.put_file(path, result_image)

@@ -80,12 +80,8 @@ def webhook_crowdcafe_newjudgement(request):
                 agreement = findAgreement(judgements)
                 if agreement:
                     log.debug('agreement is found, %s',agreement)
-                    # ------------------------------------
                     crowdboximage = CrowdBoxImage(unit = unit)
-                    image = crowdboximage.getCroppedImage(agreement)
-                    crowdboximage.saveCroppedImage(image)
-                    # createImage(agreement)
-                    # ------------------------------------
+                    crowdboximage.processAgreement(agreement)
                 else:
                     log.debug('agreement was not found')
                     #update unit status as not completed
