@@ -115,8 +115,10 @@ class CrowdBoxImage:
         mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
         # place on background
         result_image = placeMaskOnBackground(mask)
+        # place image in buffer
+        buffer = bufferImage(result_image)
         # define path for locating image in dropbox
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
         log.debug('path of the new cropped image, %s',path)
-        # save image to dropbox
-        self.dropboxfile.client.api.put_file(path, result_image)
+        # paste buffer to dropbox
+        self.dropboxfile.client.api.put_file(path, buffer)
