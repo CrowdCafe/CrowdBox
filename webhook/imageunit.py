@@ -127,14 +127,14 @@ class CrowdBoxImage:
         #exiv_data = self.dropboxfile.metadata['photo_info']
         #log.debug('existing exiv data:%s',exiv_data)
         #result_image.info = exif_data
-        result_image.save(self.dropboxfile.getFilename()+'_result')
+        result_image.save('_result'+ self.dropboxfile.getFilename())
 
         m1 = pyexiv2.ImageMetadata( self.dropboxfile.getFilename() )
         m1.read()
         # modify tags ...
         # m1['Exif.Image.Key'] = pyexiv2.ExifTag('Exif.Image.Key', 'value')
         m1.modified = True # not sure what this is good for
-        m2 = pyexiv2.metadata.ImageMetadata( self.dropboxfile.getFilename()+'_result' )
+        m2 = pyexiv2.metadata.ImageMetadata( '_result'+self.dropboxfile.getFilename())
         m2.read() # yes, we need to read the old stuff before we can overwrite it
         m1.copy( m2 )
         m2.write()
