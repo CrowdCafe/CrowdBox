@@ -4,7 +4,6 @@ import json
 import requests
 import logging
 
-
 log = logging.getLogger(__name__)
 
 from django.conf import settings
@@ -41,14 +40,3 @@ class CrowdCafeAPI:
         ret = r.json()[field]
         log.debug("%s = %s" % (field, ret))
         return ret
-    '''
-    # Judgements
-
-    def listJudgements(self, unit_id):
-        url = 'unit/' + str(unit_id) + '/judgement/'
-        r = self.apiCall('get', url)
-
-        log.debug("Judgement result %s" % r.text)
-
-        return r
-    '''

@@ -2,8 +2,8 @@ from client_crowdcafe.sdk import Unit
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from client_dropbox.client import DropboxClient,DropboxFile
-from control_io.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
-from control_task.evaluation import CanvasPolygon
+from crowd_io.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
+from crowd_task.evaluation import CanvasPolygon
 
 import logging
 
@@ -86,7 +86,8 @@ class CrowdBoxImage:
         self.unit.input_data = unit_new_data
         self.unit.save()
     # ---------------------------------------------------------
-    # Image processing
+    # Result preparation
+
     def getScaledPolygon(self, original_image, canvaspolygon):
         width, height = original_image.size
         canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['width'],1.0*height/canvaspolygon.canvas['height'])
@@ -95,11 +96,10 @@ class CrowdBoxImage:
     def getMaskPoints(self,canvaspolygon):
         return canvaspolygon.polygon.getSequence()
 
-    def processAgreement(self, agreement):
+    def processResult(self, judgement):
         # get original image
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
         # select judgement based on which to cut image
-        judgement = agreement[0]
         canvaspolygon = CanvasPolygon(judgement.output_data)
         # scale polygon of the judgement
         canvaspolygon = self.getScaledPolygon(original_image, canvaspolygon)
@@ -107,18 +107,6 @@ class CrowdBoxImage:
         canvaspolygon.polygon.enlargeAbs(settings.MARBLE_3D_ENLARGE_POLYGON)
         # get Mask points
         mask_points = self.getMaskPoints(canvaspolygon)
-        # create mask image
-        mask = maskImage(original_image,mask_points)
-        # get corners points of the polygon
+
         corners = canvaspolygon.polygon.getCorners()
-        # crop mask by the corner points
-        mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
-        # place on background
-        result_image = placeMaskOnBackground(mask)
-        # place image in buffer
-        buffer = bufferImage(result_image)
-        # define path for locating image in dropbox
-        path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
-        log.debug('path of the new cropped image, %s',path)
-        # paste buffer to dropbox
-        self.dropboxfile.client.api.put_file(path, buffer)
+        return self.dropboxfile, original_image, mask_points, corners

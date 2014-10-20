@@ -61,17 +61,13 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account',
-    'marble3d',
     'djangobower',
     'crispy_forms',
     'social_auth',
     'general',
     'dropbox',
-    'client_dropbox',
-    'webhook',
     'djcelery',
     'djrill',
-    'shapes',
     #'paypal.standard.ipn',
     #'djkombu',
     'kombu.transport.django',
@@ -150,6 +146,11 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': False,
         },
+        'background_tasks': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
         'client_dropbox': {
             'handlers': ['console'],
             'level': 'DEBUG',
@@ -160,12 +161,12 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
-        'control_io': {
+        'crowd_io': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },
-        'control_task': {
+        'crowd_task': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,

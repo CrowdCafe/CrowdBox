@@ -116,15 +116,3 @@ class Judgement:
     #TODO after you have approval at CrowdCafe - implement this method
     def save(self):
         return None
-
-
-class GoldTest:
-    def __init__(self, crowdcafe_webhook_json_data):
-        # we expect to have 2 judgements in json_data: gold and test ones
-        for item in crowdcafe_webhook_json_data:
-            judgement = Judgement()
-            judgement.setAttributes(item)
-            if judgement.isGold():
-                self.gold = judgement
-            else:
-                self.test = judgement
