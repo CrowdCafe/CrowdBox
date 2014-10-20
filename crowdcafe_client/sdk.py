@@ -17,12 +17,14 @@ class Unit:
 
     def create(self, input_data):
         if not self.pk and self.job_id:
+
             url = 'job/' + str(self.job_id) + '/unit/'
             r = self.__client.apiCall('post', url, input_data)
             log.debug("Unit res %s" % r.text)
+
             self.setAttributes(r.json())
         else:
-            log.debug('job_id is not set or unit_is is already set')
+            log.debug('job_id is not set or unit_is is already set, %s',self.pk)
         return self
 
     def get(self):
