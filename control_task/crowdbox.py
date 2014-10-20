@@ -1,10 +1,10 @@
-from crowdcafe_client.sdk import Unit
+from client_crowdcafe.sdk import Unit
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from dropbox_client.client import DropboxClient,DropboxFile
-from image_processing.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
-from qualitycontrol.evaluation import CanvasPolygon
-import pyexiv2
+from client_dropbox.client import DropboxClient,DropboxFile
+from control_io.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
+from control_task.evaluation import CanvasPolygon
+
 import logging
 
 log = logging.getLogger(__name__)
@@ -69,21 +69,19 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # CrowdCafe related methods
     def createUnit(self, request):
-        #TODO - check whether I can create a unit with empty inputdata
 
-        self.unit.create({'blank':'yes'})
+        self.unit.create({'app':'pixelman'})
         # rename file
         new_filename = 'inprocess_CCunitid'+str(self.unit.pk)+'_'+self.dropboxfile.getFilename()
         self.dropboxfile.rename(new_filename)
 
-        #TODO add url to the image
         unit_new_data = {
             'uid':self.dropboxfile.client.getUid(),
             'path':self.dropboxfile.getPath(),
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
-        unit_new_data['url'] = request.build_absolute_uri(reverse('webhook-image-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
+        unit_new_data['url'] = request.build_absolute_uri(reverse('task-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
@@ -100,12 +98,6 @@ class CrowdBoxImage:
     def processAgreement(self, agreement):
         # get original image
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
-
-        original_image.save(self.dropboxfile.getFilename())
-
-        # read exif data
-        exif_data = original_image._getexif()
-        log.debug('original exif data: %s',exif_data)
         # select judgement based on which to cut image
         judgement = agreement[0]
         canvaspolygon = CanvasPolygon(judgement.output_data)
@@ -123,27 +115,10 @@ class CrowdBoxImage:
         mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
         # place on background
         result_image = placeMaskOnBackground(mask)
-        # add EXIV data to the result_image
-        #exiv_data = self.dropboxfile.metadata['photo_info']
-        #log.debug('existing exiv data:%s',exiv_data)
-        #result_image.info = exif_data
-        result_image.save('_result'+self.dropboxfile.getFilename())
-
-        m1 = pyexiv2.ImageMetadata( self.dropboxfile.getFilename() )
-        m1.read()
-        # modify tags ...
-        # m1['Exif.Image.Key'] = pyexiv2.ExifTag('Exif.Image.Key', 'value')
-        m1.modified = True # not sure what this is good for
-        m2 = pyexiv2.metadata.ImageMetadata('_result'+self.dropboxfile.getFilename())
-        m2.read() # yes, we need to read the old stuff before we can overwrite it
-        m1.copy( m2 ,exif=True)
-        m2.write()
-
         # place image in buffer
         buffer = bufferImage(result_image)
         # define path for locating image in dropbox
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
         log.debug('path of the new cropped image, %s',path)
         # paste buffer to dropbox
-        f = open('_result'+self.dropboxfile.getFilename(), 'rb')
-        self.dropboxfile.client.api.put_file(path, f)
+        self.dropboxfile.client.api.put_file(path, buffer)

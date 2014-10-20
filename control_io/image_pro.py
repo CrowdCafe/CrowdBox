@@ -27,27 +27,11 @@ def maskImage(original_image, mask_points):
     newImArray[:,:,:3] = imArray[:,:,:3]
     #transparency (4th column)
     newImArray[:,:,3] = mask*255
-
     # back to Image from numpy
     result_image = Image.fromarray(newImArray, "RGBA") #RGBA
-    '''
-    # Crop the image
-
-    corners = self.polygon.getCorners()
-    self.image = self.image.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
-    # Create an image with green background and place image on it
-    bg = Image.new("RGB", self.image.size, (0,255,0))
-    bg.paste(self.image,self.image)
-    self.image = bg
-
-    buffer = StringIO()
-    result_image.save(buffer, "JPEG")
-    return buffer
-    '''
     return result_image
 
 def placeMaskOnBackground(original_image, color = (0,255,0)):
-    # Create an image with green background and place image on it
     bg = Image.new("RGB", original_image.size, color)
     bg.paste(original_image,original_image)
     return bg

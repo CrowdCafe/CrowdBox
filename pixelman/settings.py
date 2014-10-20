@@ -67,7 +67,7 @@ INSTALLED_APPS = (
     'social_auth',
     'general',
     'dropbox',
-    'dropbox_client',
+    'client_dropbox',
     'webhook',
     'djcelery',
     'djrill',
@@ -150,32 +150,22 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': False,
         },
-        'marble3d': {
+        'client_dropbox': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },
-        'dropbox_client': {
+        'client_crowdcafe': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },
-        'qualitycontrol': {
+        'control_io': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },
-        'crowdcafe_client': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'image_processing': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'webhook': {
+        'control_task': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
