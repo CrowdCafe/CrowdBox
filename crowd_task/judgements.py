@@ -7,10 +7,7 @@ from crowd_task.evaluation import findAgreement
 from crowd_io.io import makeOutputFromTaskResult
 
 log = logging.getLogger(__name__)
-def processCrowdCafeNewJudgement(request):
-    log.debug('request body: %s', request.body)
-    # we received list of judgements data
-    data = json.loads(request.body)
+def processCrowdCafeNewJudgement(data):
     for item in data:
         # get judgement
         judgement = Judgement()

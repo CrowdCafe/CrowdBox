@@ -36,7 +36,7 @@ class CrowdBoxImage:
                 return status
         return False
     # when we receive fileupdate as a webhook from dropbox
-    def processUpdateFromDropbox(self, request):
+    def processUpdateFromDropbox(self, domain):
         # if it was deleted from dropbox
         if self.dropboxfile.isDeleted():
             unit_id = self.checkFilenameUnitId()
@@ -53,7 +53,7 @@ class CrowdBoxImage:
                 # if file was not processed - create new unit in CrowdCafe
             else:
                 log.debug('we create a new unit at CrowdCafe')
-                self.createUnit(request)
+                self.createUnit(domain)
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
         UnitIdKeyword = 'ccunitid'
@@ -68,7 +68,7 @@ class CrowdBoxImage:
         return False
     # ---------------------------------------------------------
     # CrowdCafe related methods
-    def createUnit(self, request):
+    def createUnit(self, domain):
 
         self.unit.create({'app':'pixelman'})
         # rename file
@@ -81,7 +81,7 @@ class CrowdBoxImage:
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
-        unit_new_data['url'] = request.build_absolute_uri(reverse('task-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
+        unit_new_data['url'] = domain + (reverse('task-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()

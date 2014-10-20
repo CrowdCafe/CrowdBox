@@ -9,9 +9,9 @@ from image_pro import maskImage,placeMaskOnBackground,bufferImage
 import logging
 log = logging.getLogger(__name__)
 
-def processDropboxWebhook(request):
+def processDropboxWebhook(data,domain):
     # to iterate list of users for whom there are any dropbox updates
-    for uid in json.loads(request.body)['delta']['users']:
+    for uid in data['delta']['users']:
         dropboxclient = DropboxClient(uid)
         # get the latest updated files for a given user
         updates = dropboxclient.checkUpdates()
@@ -22,7 +22,7 @@ def processDropboxWebhook(request):
             # if updated file is an image
             if dropboxfile.isImage():
                 crowdboximage = CrowdBoxImage(dropboxfile = dropboxfile)
-                crowdboximage.processFileUpdate(request)
+                crowdboximage.processFileUpdate(domain)
 
 def makeOutputFromTaskResult(crowdcafeimage, judgement):
     # get original image
