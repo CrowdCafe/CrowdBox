@@ -36,7 +36,7 @@ class CrowdBoxImage:
                 return status
         return False
     # when we receive fileupdate as a webhook from dropbox
-    def processUpdateFromDropbox(self, domain):
+    def processFileUpdate(self, domain):
         # if it was deleted from dropbox
         if self.dropboxfile.isDeleted():
             unit_id = self.checkFilenameUnitId()
