@@ -48,9 +48,10 @@ class CrowdBoxImage:
         else:
             # if the file already was processed and has status in its name
             if self.checkFilenameStatus():
-                log.debug(self.checkFilenameUnitId)
-            # if file was not processed - create new unit in CrowdCafe
+                log.debug('the file already exists and its Unit_id is, %s',self.checkFilenameUnitId())
+                # if file was not processed - create new unit in CrowdCafe
             else:
+                log.debug('we create a new unit at CrowdCafe')
                 self.createUnit(request)
     def checkFilenameUnitId(self):
         filename = self.dropboxfile.getFilename()
