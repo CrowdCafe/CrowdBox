@@ -115,6 +115,8 @@ class CrowdBoxImage:
         mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
         # place on background
         result_image = placeMaskOnBackground(mask)
+        # add EXIV data to the result_image
+        result_image.info = self.dropboxfile.metadata['photo_info']
         # place image in buffer
         buffer = bufferImage(result_image)
         # define path for locating image in dropbox
