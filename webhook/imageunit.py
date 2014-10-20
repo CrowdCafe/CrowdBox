@@ -122,7 +122,7 @@ class CrowdBoxImage:
         # add EXIV data to the result_image
         exiv_data = self.dropboxfile.metadata['photo_info']
         log.debug('existing exiv data:%s',exiv_data)
-        result_image.info = exiv_data
+        result_image.info = exif_data
         # place image in buffer
         buffer = bufferImage(result_image)
         # define path for locating image in dropbox
