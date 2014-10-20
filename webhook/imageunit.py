@@ -99,6 +99,9 @@ class CrowdBoxImage:
     def processAgreement(self, agreement):
         # get original image
         original_image = getImageViaUrl(self.dropboxfile.getMediaURL())
+        # read exif data
+        exif_data = original_image._getexif()
+        log.debug('original exif data: %s',exif_data)
         # select judgement based on which to cut image
         judgement = agreement[0]
         canvaspolygon = CanvasPolygon(judgement.output_data)
