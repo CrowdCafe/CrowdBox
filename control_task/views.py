@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from client_dropbox.client import DropboxClient
 from client_crowdcafe.sdk import Judgement
 from control_task.evaluation import CanvasPolygon, CanvasPolygonSimilarity, findAgreement
-
+from crowdbox import CrowdBoxImage
 log = logging.getLogger(__name__)
 
 
