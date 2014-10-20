@@ -81,7 +81,7 @@ class CrowdBoxImage:
             'image_filename':self.dropboxfile.getFilename(),
             'block_title':self.dropboxfile.getRoot()
         }
-        unit_new_data['url'] = request.build_absolute_uri(reverse('webhook-image-directlink', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
+        unit_new_data['url'] = request.build_absolute_uri(reverse('webhook-image-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
