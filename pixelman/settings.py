@@ -27,7 +27,7 @@ PROJECT_ROOT = os.path.abspath(
 )
 
 MARBLE_3D_ERROR_THREASHOLD = {
-    'center_distance':0.15,
+    'center':0.15,
     'perimetr':0.15,
     'area':0.15
 }
