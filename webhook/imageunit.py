@@ -108,6 +108,8 @@ class CrowdBoxImage:
         canvaspolygon = CanvasPolygon(judgement)
         # scale polygon of the judgement
         canvaspolygon = self.getScaledPolygon(original_image, canvaspolygon)
+        # add margins to polygon
+		canvaspolygon.polygon.enlargeAbs(settings.MARBLE_3D_ENLARGE_POLYGON)
         # get Mask points
         mask_points = self.getMaskPoints(canvaspolygon)
         # create mask image
@@ -123,10 +125,10 @@ class CrowdBoxImage:
 
 
     def saveCroppedImage(self,image):
-        buffer = bufferImage(image,"JPEG")
+        #buffer = bufferImage(image,"JPEG")
         path = self.dropboxfile.getLocation()+'/completed/'+self.dropboxfile.getFilename()
         log.debug(path)
-        self.dropboxfile.client.api.put_file(path, buffer)
+        self.dropboxfile.client.api.put_file(path, image)
 
     # ---------------------------------------------------------
 '''
