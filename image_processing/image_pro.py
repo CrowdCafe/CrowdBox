@@ -60,4 +60,3 @@ def bufferImage(original_image, format="JPEG"):
 def getImageViaUrl(url):
 	response = requests.get(url)
 	return Image.open(StringIO(response.content))
-def copyEXIF(from_image,to_image):
