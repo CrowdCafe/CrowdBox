@@ -8,7 +8,7 @@ from client_dropbox.client import DropboxClient
 from client_crowdcafe.sdk import Judgement
 from crowd_task.evaluation import CanvasPolygon, CanvasPolygonSimilarity
 log = logging.getLogger(__name__)
-from background_tasks.tasks import processCrowdCafeNewJudgement
+from background_tasks.tasks import backgroundCrowdCafeWebhook
 
 # return thumbnail of an image from dropbox with a given path
 
@@ -49,6 +49,7 @@ def controlGold(request):
 def receiveNewJudgement(request):
     log.debug('---------- webhook crowdcafe new judgement --------------')
     if request.method == 'POST' and request.body:
-        processCrowdCafeNewJudgement.delay(request)
+        data = json.loads(request.body)
+        backgroundCrowdCafeWebhook.delay(data)
         return HttpResponse(status=200)
     return HttpResponse(status=405)
