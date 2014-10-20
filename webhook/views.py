@@ -82,11 +82,14 @@ def webhook_crowdcafe_newjudgement(request):
                     log.debug('agreement is found, %s',agreement)
                     crowdboximage = CrowdBoxImage(unit = unit)
                     crowdboximage.processAgreement(agreement)
+                    #update unit status as completed
+                    unit.status = 'CD'
                 else:
                     log.debug('agreement was not found')
                     #update unit status as not completed
                     unit.status = 'NC'
-                    unit.save()
+                #save unit
+                unit.save()
         return HttpResponse(status=200)
     return HttpResponse(status=405)
 
