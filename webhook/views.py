@@ -14,6 +14,7 @@ log = logging.getLogger(__name__)
 
 @csrf_exempt
 def webhook_dropbox(request):
+    log.debug('---------- webhook dropbox --------------')
     if request.method == 'GET':
         # if it is only a verification request from Dropbox - send back challenge parameter
         if 'challenge' in request.GET:
@@ -39,6 +40,7 @@ def webhook_dropbox(request):
 
 @csrf_exempt
 def webhook_crowdcafe_goldcontrol(request):
+    log.debug('---------- webhook crowdcafe quality control --------------')
     if request.method == 'POST' and request.body:
         log.debug('request body: %s', request.body)
         data = json.loads(request.body)
@@ -62,6 +64,7 @@ def webhook_crowdcafe_goldcontrol(request):
 
 @csrf_exempt
 def webhook_crowdcafe_newjudgement(request):
+    log.debug('---------- webhook crowdcafe new judgement --------------')
     if request.method == 'POST' and request.body:
         log.debug('request body: %s', request.body)
         # we received list of judgements data

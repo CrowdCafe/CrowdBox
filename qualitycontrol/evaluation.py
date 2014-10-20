@@ -70,27 +70,28 @@ class CanvasPolygonSimilarity:
         divergence = self.getDivergence(perimeters)
         log.debug('perimetr divergence, %i', divergence)
 
-        return divergence <= self.threashold['perimetr']
+        return float(divergence) <= float(self.threashold['perimetr'])
 
     def haveSimilarArea(self):
         areas = [cp.polygon.getArea() for cp in self.canvaspolygons]
         divergence = self.getDivergence(areas)
         log.debug('area divergence, %i', divergence)
 
-        return divergence <= self.threashold['area']
+        return float(divergence) <= float(self.threashold['area'])
 
     def haveSimilarCenter(self):
         centers = [self.getDistanceToCenter(cp.polygon.getCenter()) for cp in self.canvaspolygons]
         divergence = self.getDivergence(centers)
         log.debug('centers divergence, %i', divergence)
 
-        return divergence <= self.threashold['center']
+        return float(divergence) <= float(self.threashold['center'])
 
     def getDistanceToCenter(self, center_dot):
         edge = Edge({'x':0,'y':0},center_dot)
         return edge.getLength()
 
     def getDivergence(self, arr):
+        arr = [float(el) for el in arr]
         return (max(arr) - min(arr)) / min(arr)
 
 
