@@ -51,11 +51,15 @@ def copyExifData(media_root, image_from,image_to):
     filepath_from = getRandomImageName()
     filepath_to = getRandomImageName()
 
+    filepath_from = os.path.join( media_root, filepath_from )
+    filepath_to   = os.path.join( media_root, filepath_to )
+
+    os.chmod(media_root,0777)
+
     image_from.save(filepath_from)
     image_to.save(filepath_to)
 
-    filepath_from = os.path.join( media_root, filepath_from )
-    filepath_to   = os.path.join( media_root, filepath_to )
+
 
     m1 = pyexiv2.ImageMetadata(filepath_from)
     m1.read()
