@@ -51,7 +51,7 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     buffer = bufferImage(result_image)
     '''
     # copy EXIF
-    result_file = copyExifData(original_image,result_image)
+    result_file = copyExifData(settings.MEDIA_ROOT, original_image,result_image)
     f = open(result_file, 'rb')
     # define path for locating image in dropbox
     path = crowdcafeimage.dropboxfile.getLocation()+'/completed/'+crowdcafeimage.dropboxfile.getFilename()

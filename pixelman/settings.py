@@ -174,7 +174,7 @@ LOGGING = {
         },
         'celery': {
             'handlers': ['console','logfile'],
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'propagate': True
         }
 
