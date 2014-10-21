@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 from settings_secret import *
 
+
 ADMINS = (
     ('Pavel', 'pavel@crowdcafe.io'),
     ('Stefano', 'stefano@crowdcafe.io'),
@@ -220,9 +221,9 @@ SOCIAL_AUTH_PIPELINE = (
     'social_auth.backends.pipeline.social.load_extra_data',
 )
 
-LOGIN_ERROR_URL = '/'
-LOGIN_URL='/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL =APP_URL# '/'
+LOGIN_URL=APP_URL#'/'
+LOGIN_REDIRECT_URL =APP_URL# 'http://rockpearl.crowdcafe/'
 
 MEDIA_ROOT = '/var/django/media/'
 # Database
