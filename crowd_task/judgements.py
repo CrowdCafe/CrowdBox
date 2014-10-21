@@ -9,6 +9,7 @@ from crowd_io.io import makeOutputFromTaskResult
 
 log = logging.getLogger(__name__)
 def processCrowdCafeNewJudgement(data):
+    log.debug('new judgements: %s',data)
     for item in data:
         # get judgement
         judgement = Judgement()
