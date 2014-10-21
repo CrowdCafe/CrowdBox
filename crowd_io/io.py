@@ -1,12 +1,13 @@
-import json
+import logging
+
+from django.conf import settings
+
 from client_dropbox.client import DropboxClient,DropboxFile
 from crowd_task.crowdbox import CrowdBoxImage
 from image_pro import getImageViaUrl
-from crowd_task.evaluation import CanvasPolygon
-from django.conf import settings
+from crowd_task.utils.evaluation import CanvasPolygon
 from image_pro import maskImage,placeMaskOnBackground,bufferImage
 
-import logging
 log = logging.getLogger(__name__)
 
 def processDropboxWebhook(data,domain):

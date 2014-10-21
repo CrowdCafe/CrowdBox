@@ -6,7 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from client_dropbox.client import DropboxClient
 from client_crowdcafe.sdk import Judgement
-from crowd_task.evaluation import CanvasPolygon, CanvasPolygonSimilarity
+from crowd_task.utils.evaluation import CanvasPolygon, CanvasPolygonSimilarity
+
 log = logging.getLogger(__name__)
 from background_tasks.tasks import backgroundCrowdCafeWebhook
 

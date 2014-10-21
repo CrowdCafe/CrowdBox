@@ -1,12 +1,11 @@
 """
 This file is the test case for the API.
 """
-import json
-from django.test import TestCase
-
 import logging
+
+from django.test import TestCase
 log = logging.getLogger(__name__)
-from evaluation import CanvasPolygon,CanvasPolygonSimilarity
+from crowd_task.utils.evaluation import CanvasPolygon,CanvasPolygonSimilarity
 
 class Evaluation(TestCase):
     def setUp(self):

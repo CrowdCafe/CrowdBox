@@ -64,7 +64,7 @@ INSTALLED_APPS = (
     'djangobower',
     'crispy_forms',
     'social_auth',
-    'general',
+    'website',
     'dropbox',
     'djcelery',
     'djrill',

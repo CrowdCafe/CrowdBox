@@ -1,11 +1,11 @@
-from client_crowdcafe.sdk import Unit
+import logging
+
 from django.core.urlresolvers import reverse
 from django.conf import settings
-from client_dropbox.client import DropboxClient,DropboxFile
-from crowd_io.image_pro import getImageViaUrl,maskImage,placeMaskOnBackground,bufferImage
-from crowd_task.evaluation import CanvasPolygon
 
-import logging
+from client_crowdcafe.sdk import Unit
+from client_dropbox.client import DropboxClient,DropboxFile
+
 
 log = logging.getLogger(__name__)
 

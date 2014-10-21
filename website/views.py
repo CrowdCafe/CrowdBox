@@ -5,8 +5,4 @@ from django.template import RequestContext
 from django.contrib.auth import logout, authenticate, login
 
 def welcome(request):
-	return render_to_response('welcome.html', context_instance=RequestContext(request)) 
-
-def logout_user(request):
-    logout(request)
-    return redirect(reverse('welcome')) 
+	return render_to_response('welcome.html', context_instance=RequestContext(request))

@@ -1,10 +1,11 @@
 __author__ = 'pavelk'
 import logging
-import json
+
 from client_crowdcafe.sdk import Judgement
 from crowdbox import CrowdBoxImage
-from crowd_task.evaluation import findAgreement
+from crowd_task.utils.evaluation import findAgreement
 from crowd_io.io import makeOutputFromTaskResult
+
 
 log = logging.getLogger(__name__)
 def processCrowdCafeNewJudgement(data):

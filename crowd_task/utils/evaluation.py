@@ -6,7 +6,6 @@ log = logging.getLogger(__name__)
 
 import json
 from django.conf import settings
-from client_crowdcafe.sdk import Judgement
 from coordinates import getRectangleCoordinates, getPolygonPoints, getCanvasSize
 from polygons import Polygon, Edge
 import itertools
