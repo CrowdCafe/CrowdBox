@@ -6,7 +6,6 @@ from django.conf import settings
 from client_crowdcafe.sdk import Unit
 from client_dropbox.client import DropboxClient,DropboxFile
 
-
 log = logging.getLogger(__name__)
 
 class CrowdBoxImage:

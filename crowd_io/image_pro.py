@@ -6,6 +6,8 @@ import requests
 from StringIO import StringIO
 import logging
 import pyexiv2
+from random import randint
+import os
 
 log = logging.getLogger(__name__)
 
@@ -44,3 +46,25 @@ def bufferImage(original_image, format="JPEG"):
 def getImageViaUrl(url):
 	response = requests.get(url)
 	return Image.open(StringIO(response.content))
+
+def copyExifData(media_root, image_from,image_to):
+    filepath_from = getRandomImageName()
+    filepath_to = getRandomImageName()
+
+    image_from.save(filepath_from)
+    image_to.save(filepath_to)
+
+    filepath_from = os.path.join( media_root, filepath_from )
+    filepath_to   = os.path.join( media_root, filepath_to )
+
+    m1 = pyexiv2.ImageMetadata(filepath_from)
+    m1.read()
+    m1.modified = True # not sure what this is good for
+    m2 = pyexiv2.metadata.ImageMetadata(filepath_to)
+    m2.read() # yes, we need to read the old stuff before we can overwrite it
+    m1.copy( m2 )
+    m2.write()
+
+    return filepath_to
+def getRandomImageName():
+    str(randint(10000,99999))+'.jpeg'

@@ -6,11 +6,14 @@ from client_dropbox.client import DropboxClient,DropboxFile
 from crowd_task.crowdbox import CrowdBoxImage
 from image_pro import getImageViaUrl
 from crowd_task.utils.evaluation import CanvasPolygon
-from image_pro import maskImage,placeMaskOnBackground,bufferImage
+from image_pro import maskImage,placeMaskOnBackground,bufferImage,copyExifData
+
 
 log = logging.getLogger(__name__)
 
 def processDropboxWebhook(data,domain):
+    # we received list of judgements data
+    log.debug('data from dropbox: %s', data)
     # to iterate list of users for whom there are any dropbox updates
     for uid in data['delta']['users']:
         dropboxclient = DropboxClient(uid)
@@ -43,10 +46,17 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
     # place on background
     result_image = placeMaskOnBackground(mask)
+    '''
     # place image in buffer
     buffer = bufferImage(result_image)
+    '''
+    # copy EXIF
+    result_file = copyExifData(original_image,result_image)
+    f = open(result_file, 'rb')
     # define path for locating image in dropbox
     path = crowdcafeimage.dropboxfile.getLocation()+'/completed/'+crowdcafeimage.dropboxfile.getFilename()
     log.debug('path of the new cropped image, %s',path)
     # paste buffer to dropbox
-    crowdcafeimage.dropboxfile.client.api.put_file(path, buffer)
+    #crowdcafeimage.dropboxfile.client.api.put_file(path, buffer)
+    crowdcafeimage.dropboxfile.client.api.put_file(path, f)
+

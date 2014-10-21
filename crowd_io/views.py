@@ -16,11 +16,8 @@ def webhook_dropbox(request):
             return HttpResponse(request.GET['challenge'])
     elif request.method == 'POST':
         if request.body:
-            log.debug('request body: %s', request.body)
-            # we received list of judgements data
             data = json.loads(request.body)
             backgroundDropboxWebhook.delay(data, request.build_absolute_uri('/'))
-
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)
