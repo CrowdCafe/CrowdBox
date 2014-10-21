@@ -67,4 +67,4 @@ def copyExifData(media_root, image_from,image_to):
 
     return filepath_to
 def getRandomImageName():
-    str(randint(10000,99999))+'.jpeg'
+    return str(randint(10000,99999))+'.jpeg'

@@ -163,12 +163,12 @@ LOGGING = {
             'propagate': False,
         },
         'crowd_io': {
-            'handlers': ['console'],
+            'handlers': ['console','logfile'],
             'level': 'DEBUG',
             'propagate': False,
         },
         'crowd_task': {
-            'handlers': ['console'],
+            'handlers': ['console','logfile'],
             'level': 'DEBUG',
             'propagate': False,
         },
