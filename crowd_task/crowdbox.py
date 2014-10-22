@@ -8,11 +8,14 @@ from client_dropbox.client import DropboxClient,DropboxFile
 
 log = logging.getLogger(__name__)
 
-IMAGE_STATUSES = ('syncing','working','completed')
+IMAGE_STATUSES = ('syncing','working','completed','result')
 
 STATUS_SYNC = IMAGE_STATUSES[0]
 STATUS_WORK = IMAGE_STATUSES[1]
 STATUS_DONE = IMAGE_STATUSES[2]
+STATUS_RSLT = IMAGE_STATUSES[3]
+
+RSLT_FOLDER = 'completed'
 
 IMAGE_STATUS_SEPARATOR = '-'
 IMAGE_UNIT_ID_KEYWORD = 'cafe_id='
@@ -65,8 +68,9 @@ class CrowdBoxImage:
             if unit_id:
                 self.unit.pk = unit_id
                 self.unit.get()
-                self.unit.published = False
-                self.unit.save()
+                if self.unit.status != 'CD':
+                    self.unit.published = False
+                    self.unit.save()
         else:
             # if the file already was processed and has status in its name
             if self.checkFilenameStatus():
@@ -75,25 +79,30 @@ class CrowdBoxImage:
             else:
                 log.debug('we create a new unit at CrowdCafe')
                 self.createUnit(domain)
-
+    def getFilenameForStatus(self, status, original_filename):
+        new_filename = status + IMAGE_STATUS_SEPARATOR
+        if status in [STATUS_SYNC,STATUS_RSLT]:
+            new_filename +=original_filename
+        elif status in [STATUS_WORK, STATUS_DONE]:
+            new_filename +=IMAGE_UNIT_ID_KEYWORD+str(self.unit.pk)+IMAGE_STATUS_SEPARATOR+original_filename
+        return new_filename
     # ---------------------------------------------------------
     # CrowdCafe related methods
     def createUnit(self, domain):
-        log.debug('pk before is %s',self.unit.pk)
         # rename file that we are syncing (to avoid getting duplicated updates)
         filename = self.dropboxfile.getFilename()
-        sync_filename = STATUS_SYNC+IMAGE_STATUS_SEPARATOR+filename
-        self.dropboxfile.rename(sync_filename)
+        self.dropboxfile.rename(self.getFilenameForStatus(STATUS_SYNC,filename))
         # create blank unit at CrowdCafe to receive pk
+        log.debug('pk before is %s',self.unit.pk)
         self.unit.create({'app':'pixelman'})
-        # construct new filename with work status and unit_id
-        new_filename = STATUS_WORK+IMAGE_STATUS_SEPARATOR+IMAGE_UNIT_ID_KEYWORD+str(self.unit.pk)+IMAGE_STATUS_SEPARATOR+filename
         log.debug('pk after is %s',self.unit.pk)
+        # construct new filename with work status and unit_id
+        work_filename = self.getFilenameForStatus(STATUS_WORK,filename)
         # construct crowdcafe unit data
         unit_new_data = {
             'uid':self.dropboxfile.client.getUid(),
-            'path':self.dropboxfile.getLocation()+'/'+new_filename,
-            'image_filename':new_filename,
+            'path':self.dropboxfile.getLocation()+'/'+work_filename,
+            'image_filename':filename,
             'block_title':self.dropboxfile.getRoot()
         }
         # construct url which returns thumbnail url
@@ -103,8 +112,7 @@ class CrowdBoxImage:
         self.unit.input_data = unit_new_data
         self.unit.save()
         # update filename at dropbox
-        self.dropboxfile.rename(new_filename)
-
+        self.dropboxfile.rename(work_filename)
     # ---------------------------------------------------------
     # Image processing
     def getScaledPolygon(self, original_image, canvaspolygon):

@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 
 from client_dropbox.client import DropboxClient,DropboxFile
-from crowd_task.crowdbox import CrowdBoxImage
+from crowd_task.crowdbox import CrowdBoxImage, RSLT_FOLDER,STATUS_RSLT
 from image_pro import getImageViaUrl
 from crowd_task.utils.evaluation import CanvasPolygon
 from image_pro import maskImage,placeMaskOnBackground,bufferImage,copyExifData
@@ -55,7 +55,7 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     result_file = copyExifData(settings.MEDIA_ROOT, original_image,result_image)
     f = open(result_file, 'rb')
     # define path for locating image in dropbox
-    path = crowdcafeimage.dropboxfile.getLocation()+'/completed/'+crowdcafeimage.dropboxfile.getFilename()
+    path = crowdcafeimage.dropboxfile.getLocation()+'/'+RSLT_FOLDER+'/'+crowdcafeimage.getFilenameForStatus(STATUS_RSLT,crowdcafeimage.unit.input_data['image_filename'])
     log.debug('path of the new cropped image, %s',path)
     # paste buffer to dropbox
     #crowdcafeimage.dropboxfile.client.api.put_file(path, buffer)
