@@ -69,7 +69,7 @@ class Unit:
 
     def setAttributes(self, data):
         self.data = data
-
+        log.debug('updated unit attributes %s',data)
         self.pk = data['pk']
         self.job_id = data['job']
         self.input_data = data['input_data']

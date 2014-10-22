@@ -36,6 +36,7 @@ class CrowdBoxImage:
         return False
     # when we receive fileupdate as a webhook from dropbox
     def processFileUpdate(self, domain):
+        log.debug('processFileUpdate is going, its unit is %s',self.unit)
         # if it was deleted from dropbox
         if self.dropboxfile.isDeleted():
             unit_id = self.checkFilenameUnitId()
@@ -68,8 +69,10 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # CrowdCafe related methods
     def createUnit(self, domain):
-
+        log.debug('pk before is %s',self.unit.pk)
         self.unit.create({'app':'pixelman'})
+        log.debug('pk after is %s',self.unit.pk)
+
         # rename file
         new_filename = 'inprocess_CCunitid'+str(self.unit.pk)+'_'+self.dropboxfile.getFilename()
 
