@@ -72,18 +72,19 @@ class CrowdBoxImage:
         self.unit.create({'app':'pixelman'})
         # rename file
         new_filename = 'inprocess_CCunitid'+str(self.unit.pk)+'_'+self.dropboxfile.getFilename()
-        self.dropboxfile.rename(new_filename)
+
 
         unit_new_data = {
             'uid':self.dropboxfile.client.getUid(),
-            'path':self.dropboxfile.getPath(),
-            'image_filename':self.dropboxfile.getFilename(),
+            'path':self.dropboxfile.getLocation()+'/'+new_filename,
+            'image_filename':new_filename,
             'block_title':self.dropboxfile.getRoot()
         }
         unit_new_data['url'] = domain[:-1] + (reverse('task-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
         log.debug('Update unit with data %s',unit_new_data)
         self.unit.input_data = unit_new_data
         self.unit.save()
+        self.dropboxfile.rename(new_filename)
     # ---------------------------------------------------------
     # Image processing
     def getScaledPolygon(self, original_image, canvaspolygon):
