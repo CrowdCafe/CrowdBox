@@ -9,8 +9,11 @@ from client_dropbox.client import DropboxClient,DropboxFile
 log = logging.getLogger(__name__)
 
 class CrowdBoxImage:
-    def __init__(self, dropboxfile = None, unit = Unit(job_id = settings.CROWDCAFE['job_id'])):
-
+    def __init__(self, dropboxfile = None, unit = None):
+        if unit is None:
+            self.unit = Unit(job_id = settings.CROWDCAFE['job_id'])
+        else:
+            self.unit = unit
         self.dropboxfile = dropboxfile
         self.unit = unit
         if not self.dropboxfile:
