@@ -51,6 +51,7 @@ def receiveNewJudgement(request):
     log.debug('---------- webhook crowdcafe new judgement --------------')
     if request.method == 'POST' and request.body:
         data = json.loads(request.body)
+        log.debug('request body: %s', data)
         backgroundCrowdCafeWebhook.delay(data)
         return HttpResponse(status=200)
     return HttpResponse(status=405)
