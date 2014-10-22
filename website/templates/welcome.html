@@ -2,13 +2,15 @@
 
 {% block content%}
 <div class='container'>
-<h1>PixelMan</h1>
+<h1 class='center'>PixelMan</h1>
 <h3 class='center'>Make the crowd to crop objects on images you want.</h3>
 	<div class='center'>
     {% if user.is_authenticated %}
             <a href="/">go to my images</a>
         {% else %}
-        <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-block btn-lg btn-dropbox"><i class="fa fa-dropbox"></i> Dropbox </a>
+        <p>
+            <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox"><i class="fa fa-dropbox"></i> Login via Dropbox </a>
+        </p>
         {%endif%}
 	</div>
 </div>
