@@ -1,5 +1,7 @@
 PixelMan
 =========
+![PixelMan Logo]
+(https://raw.githubusercontent.com/CrowdCafe/Pixelman/master/website/static/img/logo_256.jpg)
 
 With PixelMan you can process your image files using micro-tasking platform http://crowdcafe.io by simply pasting your images to an app folder in dropbox.
 
