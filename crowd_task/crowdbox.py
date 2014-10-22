@@ -15,7 +15,6 @@ class CrowdBoxImage(object):
         else:
             self.unit = unit
         self.dropboxfile = dropboxfile
-        self.unit = unit
         if not self.dropboxfile:
             self.getDropboxFile()
     # ---------------------------------------------------------
