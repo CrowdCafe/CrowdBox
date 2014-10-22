@@ -1,13 +1,24 @@
 {% extends 'base.html'%}
+{%load static%}
 
 {% block content%}
 <div class='container'>
 <h1 class='center'>PixelMan</h1>
-<h3 class='center'>Make the crowd to crop objects on images you want.</h3>
+
 	<div class='center'>
     {% if user.is_authenticated %}
-            <a href="/">go to my images</a>
+        <h3 class='center'>Please go to your dropbox:</h3>
+        <p>
+        \Apps\Pixelman
+        </p>
+        <p>
+        Put here folder with your images and wait the crowd to process it
+        </p>
+            <div>
+                <img src="{% static 'img/desktop_dropbox_folder.png' %}">
+            </div>
         {% else %}
+        <h3 class='center'>Make the crowd to crop objects on images you want.</h3>
         <p>
             <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox"><i class="fa fa-dropbox"></i> Login via Dropbox </a>
         </p>
