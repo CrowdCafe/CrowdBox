@@ -8,7 +8,16 @@ from client_dropbox.client import DropboxClient,DropboxFile
 
 log = logging.getLogger(__name__)
 
-class CrowdBoxImage(object):
+IMAGE_STATUSES = ('syncing','working','completed')
+
+STATUS_SYNC = IMAGE_STATUSES[0]
+STATUS_WORK = IMAGE_STATUSES[1]
+STATUS_DONE = IMAGE_STATUSES[2]
+
+IMAGE_STATUS_SEPARATOR = '-'
+IMAGE_UNIT_ID_KEYWORD = 'cafe_id='
+
+class CrowdBoxImage:
     def __init__(self, dropboxfile = None, unit = None):
         if unit is None:
             self.unit = Unit(job_id = settings.CROWDCAFE['job_id'])
@@ -30,15 +39,25 @@ class CrowdBoxImage(object):
         else:
             log.debug('unit is not set')
     def checkFilenameStatus(self):
-        statuses = ('inprocess','completed')
-        for status in statuses:
-            if status+'_' in self.dropboxfile.getFilename():
+        for status in IMAGE_STATUSES:
+            if status+IMAGE_STATUS_SEPARATOR in self.dropboxfile.getFilename():
                 log.debug(status)
                 return status
         return False
+    def checkFilenameUnitId(self):
+        filename = self.dropboxfile.getFilename()
+
+        if IMAGE_UNIT_ID_KEYWORD in filename:
+            unitid_with_filename = filename[filename.rfind(IMAGE_UNIT_ID_KEYWORD)+len(IMAGE_UNIT_ID_KEYWORD):len(filename)]
+            log.debug(unitid_with_filename)
+            unit_id = int(unitid_with_filename[:unitid_with_filename.find(IMAGE_STATUS_SEPARATOR)])
+            log.debug(unit_id)
+            return unit_id
+        log.debug(IMAGE_UNIT_ID_KEYWORD+' is not in the '+filename)
+        return False
     # when we receive fileupdate as a webhook from dropbox
     def processFileUpdate(self, domain):
-        log.debug('processFileUpdate is going, its unit is %s',self.unit)
+        log.debug('processFileUpdate is going, its unit is %s',self.unit.pk)
         # if it was deleted from dropbox
         if self.dropboxfile.isDeleted():
             unit_id = self.checkFilenameUnitId()
@@ -56,40 +75,36 @@ class CrowdBoxImage(object):
             else:
                 log.debug('we create a new unit at CrowdCafe')
                 self.createUnit(domain)
-    def checkFilenameUnitId(self):
-        filename = self.dropboxfile.getFilename()
-        UnitIdKeyword = 'ccunitid'
 
-        if UnitIdKeyword in filename:
-            unitid_with_filename = filename[filename.rfind(UnitIdKeyword)+len(UnitIdKeyword):len(filename)]
-            log.debug(unitid_with_filename)
-            unit_id = int(unitid_with_filename[:unitid_with_filename.find('_')])
-            log.debug(unit_id)
-            return unit_id
-        log.debug(UnitIdKeyword+' is not in the '+filename)
-        return False
     # ---------------------------------------------------------
     # CrowdCafe related methods
     def createUnit(self, domain):
         log.debug('pk before is %s',self.unit.pk)
+        # rename file that we are syncing (to avoid getting duplicated updates)
+        filename = self.dropboxfile.getFilename()
+        sync_filename = STATUS_SYNC+IMAGE_STATUS_SEPARATOR+filename
+        self.dropboxfile.rename(sync_filename)
+        # create blank unit at CrowdCafe to receive pk
         self.unit.create({'app':'pixelman'})
+        # construct new filename with work status and unit_id
+        new_filename = STATUS_WORK+IMAGE_STATUS_SEPARATOR+IMAGE_UNIT_ID_KEYWORD+str(self.unit.pk)+IMAGE_STATUS_SEPARATOR+filename
         log.debug('pk after is %s',self.unit.pk)
-
-        # rename file
-        new_filename = 'inprocess_CCunitid'+str(self.unit.pk)+'_'+self.dropboxfile.getFilename()
-
-
+        # construct crowdcafe unit data
         unit_new_data = {
             'uid':self.dropboxfile.client.getUid(),
             'path':self.dropboxfile.getLocation()+'/'+new_filename,
             'image_filename':new_filename,
             'block_title':self.dropboxfile.getRoot()
         }
+        # construct url which returns thumbnail url
         unit_new_data['url'] = domain[:-1] + (reverse('task-thumbnail', kwargs={'uid': unit_new_data['uid']})+'?path='+unit_new_data['path'])
         log.debug('Update unit with data %s',unit_new_data)
+        # update with new data crowdcafe unit
         self.unit.input_data = unit_new_data
         self.unit.save()
+        # update filename at dropbox
         self.dropboxfile.rename(new_filename)
+
     # ---------------------------------------------------------
     # Image processing
     def getScaledPolygon(self, original_image, canvaspolygon):
