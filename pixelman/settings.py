@@ -46,6 +46,7 @@ ALLOWED_HOSTS = ['crowdcrop.crowdcafe.io','80.240.134.163','localhost']
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
 BOWER_INSTALLED_APPS = (
+    'BrandButtons',
     'bootstrap',
     'fontawesome',
     'jquery',
@@ -148,7 +149,7 @@ LOGGING = {
             'propagate': False,
         },
         'background_tasks': {
-            'handlers': ['console'],
+            'handlers': ['console','logfile'],
             'level': 'DEBUG',
             'propagate': False,
         },
@@ -175,7 +176,7 @@ LOGGING = {
         'celery': {
             'handlers': ['console','logfile'],
             'level': 'DEBUG',
-            'propagate': True
+            'propagate': False
         }
 
     }

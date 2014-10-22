@@ -2,9 +2,14 @@
 
 {% block content%}
 <div class='container'>
-<h3 class='center'>Application for cropping images via <a href="http://crowdcafe.io" target="_blank">CrowdCafe</a></h3>
+<h1>PixelMan</h1>
+<h3 class='center'>Make the crowd to crop objects on images you want.</h3>
 	<div class='center'>
-		<img style='border: 1px solid #DDD;' src='http://habrastorage.org/files/2e9/21c/0ba/2e921c0ba1c646aaa473d12f7091eb06.png' />
+    {% if user.is_authenticated %}
+            <a href="/">go to my images</a>
+        {% else %}
+        <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn-block btn btn-dropbox-inversed"><i class="fa fa-dropbox"></i> Dropbox </a>
+        {%endif%}
 	</div>
 </div>
 {% endblock%}
