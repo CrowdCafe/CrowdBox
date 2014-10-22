@@ -7,6 +7,7 @@ from crowd_task.crowdbox import CrowdBoxImage
 from image_pro import getImageViaUrl
 from crowd_task.utils.evaluation import CanvasPolygon
 from image_pro import maskImage,placeMaskOnBackground,bufferImage,copyExifData
+import os
 
 
 log = logging.getLogger(__name__)
@@ -59,4 +60,8 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     # paste buffer to dropbox
     #crowdcafeimage.dropboxfile.client.api.put_file(path, buffer)
     crowdcafeimage.dropboxfile.client.api.put_file(path, f)
+    # remove file
+    if os.path.exists(result_file):
+        os.remove(result_file)
+
 
