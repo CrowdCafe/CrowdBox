@@ -48,8 +48,8 @@ def getImageViaUrl(url):
 	return Image.open(StringIO(response.content))
 
 def copyExifData(media_root, image_from,image_to):
-    filepath_from = getRandomImageName()
-    filepath_to = getRandomImageName()
+    filepath_from = getRandomImageName('from')
+    filepath_to = getRandomImageName('to')
 
     filepath_from = os.path.join( media_root, filepath_from )
     filepath_to   = os.path.join( media_root, filepath_to )
@@ -58,8 +58,6 @@ def copyExifData(media_root, image_from,image_to):
 
     image_from.save(filepath_from)
     image_to.save(filepath_to)
-
-
 
     m1 = pyexiv2.ImageMetadata(filepath_from)
     m1.read()
@@ -70,5 +68,5 @@ def copyExifData(media_root, image_from,image_to):
     m2.write()
 
     return filepath_to
-def getRandomImageName():
-    return str(randint(10000,99999))+'.jpeg'
+def getRandomImageName(key):
+    return key+'_'+str(randint(10000,99999))+'.jpeg'
