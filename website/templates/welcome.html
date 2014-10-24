@@ -3,14 +3,16 @@
 
 {% block content%}
 <div class='container'>
-<h1 class='center'>CrowdBox</h1>
 	<div class='center'>
+        <img src="{% static 'img/logo_512.jpg' %}">
         <h3 class='center'>Make the crowd crop objects on images you want.</h3>
         <p>
             <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox">
                 <i class="fa fa-dropbox"></i> login via Dropbox
             </a>
-            <small>you receive 1 euro to try the tool</small>
+        </p>
+        <p>
+            you get 1 euro to try the tool
         </p>
 	</div>
 </div>
