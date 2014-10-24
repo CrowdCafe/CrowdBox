@@ -181,7 +181,7 @@ LOGGING = {
 
     }
 }
-APP_URL = "http://crowdcrop.me/"
+APP_URL = "http://crowdbox.me/"
 # PayPal account on which requestors send money
 # ---------------------------------------------------------------
 PAYPAL_RECEIVER_EMAIL = "pavel@crowdcafe.io"
