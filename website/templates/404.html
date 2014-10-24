@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{%load static%}
+
+{% block content%}
+<div class='container center'>
+        <img src="{% static 'img/logo_error_404.jpg' %}">
+        <p>
+            <a href="{% url 'website-welcome'%}" class="btn btn-lg btn-default">
+               main page
+            </a>
+        </p>
+</div>
+{% endblock%}
