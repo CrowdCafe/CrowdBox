@@ -25,10 +25,9 @@
             <img src="{% static 'img/workflow/step5.png' %}">
         </li>
         </ol>
-
-
-    {% if not user.is_authenticated %}
-            <p>
+        {% if not user.is_authenticated %}
+        <hr>
+            <p class='center'>
             <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox-inversed">
                 <i class="fa fa-dropbox"></i> login via Dropbox
             </a>
