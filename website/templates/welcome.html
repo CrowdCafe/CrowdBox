@@ -3,24 +3,14 @@
 
 {% block content%}
 <div class='container'>
-<h1 class='center'>PixelMan</h1>
-
+<h1 class='center'>CrowdBox</h1>
 	<div class='center'>
-    {% if user.is_authenticated %}
-        <h3 class='center'>Please go to your dropbox:</h3>
-        <p>
-        \Apps\Pixelman
-        </p>
-        <p>
-        Put here folder with your images and wait the crowd to process it
-        </p>
-                <img class="wide-image" src="{% static 'img/desktop_dropbox_folder.jpg' %}">
-        {% else %}
         <h3 class='center'>Make the crowd to crop objects on images you want.</h3>
         <p>
-            <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox"><i class="fa fa-dropbox"></i> Login via Dropbox </a>
+            <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox">
+                <i class="fa fa-dropbox"></i> Login via Dropbox
+            </a>
         </p>
-        {%endif%}
 	</div>
 </div>
 {% endblock%}

@@ -85,9 +85,9 @@ MIDDLEWARE_CLASSES = (
     'social_auth.middleware.SocialAuthExceptionMiddleware',
 )
 
-ROOT_URLCONF = 'pixelman.urls'
+ROOT_URLCONF = 'crowdbox.urls'
 
-WSGI_APPLICATION = 'pixelman.wsgi.application'
+WSGI_APPLICATION = 'crowdbox.wsgi.application'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -126,7 +126,7 @@ LOGGING = {
         'logfile': {
                 'level':'DEBUG',
                 'class':'logging.handlers.RotatingFileHandler',
-                'filename': "/var/log/django/pixelman.log",
+                'filename': "/var/log/django/crowdbox.log",
                 'maxBytes': 50000,
                 'backupCount': 3,
                 'formatter': 'standard'
@@ -181,7 +181,7 @@ LOGGING = {
 
     }
 }
-APP_URL = "http://rockpearl.crowdcafe.io/"
+APP_URL = "http://crowdcrop.me/"
 # PayPal account on which requestors send money
 # ---------------------------------------------------------------
 PAYPAL_RECEIVER_EMAIL = "pavel@crowdcafe.io"

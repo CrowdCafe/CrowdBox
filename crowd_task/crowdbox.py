@@ -94,7 +94,7 @@ class CrowdBoxImage:
         self.dropboxfile.rename(self.getFilenameForStatus(STATUS_SYNC,filename))
         # create blank unit at CrowdCafe to receive pk
         log.debug('pk before is %s',self.unit.pk)
-        self.unit.create({'app':'pixelman'})
+        self.unit.create({'app':'crowdbox'})
         log.debug('pk after is %s',self.unit.pk)
         # construct new filename with work status and unit_id
         work_filename = self.getFilenameForStatus(STATUS_WORK,filename)
