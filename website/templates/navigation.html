@@ -7,6 +7,9 @@
 			<a href="{% url 'logout' %}">{{user.first_name}} | logout</a>
 			{%endif%}
 			</li>
+        <li>
+            <a href="{% url 'website-info' %}">How does it work?</a>
+        </li>
 		</ul>
 		<h3 class="text-muted"><a href='{% url "website-welcome" %}'><img src="{% static 'img/logo_64.jpg' %}"> CrowdBox</a></h3>
 	</div>
