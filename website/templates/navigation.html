@@ -2,9 +2,6 @@
 <div class='container'>
 	<div class="header">
 		<ul class="nav nav-pills pull-right">
-        <li>
-            <a href="{% url 'website-info' %}">About</a>
-        </li>
             {% if user.is_authenticated %}
             <li>
 			<a href="{% url 'logout' %}">logout</a>

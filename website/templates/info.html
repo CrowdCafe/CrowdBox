@@ -4,20 +4,19 @@
 {% block content%}
 <div class='container'>
 	<div class='workflow'>
-
-            <div>
+        <div>
         <h4 class='center'>1. CrowdBox creates folder in your Dropbox:</h4>
         <p>
         <img src="{% static 'img/workflow/step1.png' %}">
         </p>
-                </div>
- <div >
+        </div>
+        <div >
         <h4 class='center'>2. You create a folder inside and put there images you want to crop:</h4>
         <p>
         <img src="{% static 'img/workflow/step2.png' %}">
         </p>
-</div> <div >
-        <h4 class='center'>3. CrowdBox sync these images with <a href="http://crowdcafe.io/" target="_blank">CrowdCafe</a>a>:</h4>
+        </div> <div >
+        <h4 class='center'>3. CrowdBox sync these images with <a href="http://crowdcafe.io/" target="_blank">CrowdCafe</a>:</h4>
         <p>
         <img src="{% static 'img/workflow/step3.png' %}">
         </p>
@@ -28,14 +27,20 @@
         <p>
         <img src="{% static 'img/workflow/step4.png' %}">
         </p>
-                 </div>
- <div >
+        </div>
+        <div >
         <h4 class='center'>5. You receive shaped images:</h4>
         <p>
         <img src="{% static 'img/workflow/step5.png' %}">
         </p>
      </div>
-
+    {% if not user.is_authenticated %}
+            <p>
+            <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox-inversed">
+                <i class="fa fa-dropbox"></i> login via Dropbox
+            </a>
+        </p>
+            {%endif%}
 
 
 	</div>
