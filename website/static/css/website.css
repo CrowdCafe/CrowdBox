@@ -3,3 +3,19 @@
     left:0px;
     width:100%;
 }
+.workflow{
+    width:100%;
+    margin:0px;
+    padding:0px;
+   position:absolute;
+}
+.workflow > div{
+    width:20%;
+    display:inline-block;
+    float:left;
+    margin:0px;
+    padding:0px;
+}
+.workflow > div img{
+    height:70%;
+}
