@@ -1,13 +1,15 @@
-PixelMan
+CrowdBox
 =========
+http://crowdbox.me
+
 ![PixelMan Logo]
 (https://raw.githubusercontent.com/CrowdCafe/Pixelman/master/website/static/img/logo_256.jpg)
 
-With PixelMan you can process your image files using micro-tasking platform http://crowdcafe.io by simply pasting your images to an app folder in dropbox.
+With CrowdBox you can process your image files using micro-tasking platform http://crowdcafe.io by simply pasting your images to an app folder in dropbox.
 
 * *User* - person who wants to crop his/her images
 * *Worker* - person who performs tasks on CrowdCafe
-* *App* - PixelMan web-application
+* *App* - CrowdBox web-application
 
 1. User logs in to App via Dropbox
 2. In user's dropbox a new App folder is created
