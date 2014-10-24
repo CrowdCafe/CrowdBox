@@ -5,17 +5,11 @@
 }
 .workflow{
     width:100%;
-    margin:0px;
-    padding:0px;
-   position:absolute;
 }
 .workflow > div{
-    width:20%;
-    display:inline-block;
-    float:left;
-    margin:0px;
-    padding:0px;
+    width:100%;
+    text-align: center;
 }
 .workflow > div img{
-    height:70%;
+    height:256px;
 }
