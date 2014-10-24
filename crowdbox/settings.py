@@ -41,7 +41,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['crowdcrop.crowdcafe.io','80.240.134.163','localhost']
+ALLOWED_HOSTS = ['crowdbox.me','crowdbox.me:8000','80.240.134.163','localhost']
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
