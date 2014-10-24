@@ -6,9 +6,6 @@
             <a href="{% url 'website-info' %}">About</a>
         </li>
             {% if user.is_authenticated %}
-			<li>
-			<a href="#">{{user.first_name}}</a>
-            </li>
             <li>
 			<a href="{% url 'logout' %}">logout</a>
 			</li>
