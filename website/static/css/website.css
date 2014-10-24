@@ -6,10 +6,13 @@
 .workflow{
     width:100%;
 }
-.workflow > div{
+.workflow > li{
     width:100%;
     text-align: center;
 }
-.workflow > div img{
+.workflow > li h4{
+    text-align: left;
+}
+.workflow > li img{
     height:256px;
 }
