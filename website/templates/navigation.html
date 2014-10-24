@@ -2,15 +2,18 @@
 <div class='container'>
 	<div class="header">
 		<ul class="nav nav-pills pull-right">
-			<li>
-			{% if user.is_authenticated %}
-			<a href="{% url 'logout' %}">{{user.first_name}} | logout</a>
-			{%endif%}
-			</li>
         <li>
-            <a href="{% url 'website-info' %}">How does it work?</a>
+            <a href="{% url 'website-info' %}">About</a>
         </li>
+            {% if user.is_authenticated %}
+			<li>
+			<a href="#">{{user.first_name}}</a>
+            </li>
+            <li>
+			<a href="{% url 'logout' %}">logout</a>
+			</li>
+            {%endif%}
 		</ul>
-		<h3 class="text-muted"><a href='{% url "website-welcome" %}'><img src="{% static 'img/logo_64.jpg' %}"> CrowdBox</a></h3>
+		<h3 class="text-muted"><a href='{% url "website-welcome" %}'><img src="{% static 'img/logo_64.jpg' %}"></a></h3>
 	</div>
 </div>
