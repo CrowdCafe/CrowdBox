@@ -6,7 +6,7 @@ from social_auth.models import UserSocialAuth
 from client_crowdcafe.sdk import Unit
 from client_dropbox.client import DropboxClient,DropboxFile
 
-from models import Account, Membership, FundTransfer
+from account.models import Account, Membership, FundTransfer
 log = logging.getLogger(__name__)
 
 IMAGE_STATUSES = ('syncing','working','completed','result')
