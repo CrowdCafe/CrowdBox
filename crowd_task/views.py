@@ -50,6 +50,7 @@ def controlGold(request):
 def receiveNewJudgement(request):
     log.debug('---------- webhook crowdcafe new judgement --------------')
     if request.method == 'POST' and request.body:
+        log.debug('request.body %s',request.body)
         data = json.loads(request.body)
         log.debug('request body: %s', data)
         backgroundCrowdCafeWebhook.delay(data)
