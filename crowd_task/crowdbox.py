@@ -134,8 +134,7 @@ class CrowdBoxImage:
         admin_account = Account.objects.get(pk = settings.BUSINESS['admin_account_id'])
         if self.user:
             log.debug('create a payment')
-            #to_account = admin_account,
-            payment = FundTransfer(from_account = self.user.profile.personalAccount, amount = float(amount), description = description)
+            payment = FundTransfer(from_account = self.user.profile.personalAccount, to_account = admin_account, amount = float(amount), description = description)
             payment.save()
 
 
