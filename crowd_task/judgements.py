@@ -28,7 +28,7 @@ def processCrowdCafeNewJudgement(data):
                 # pick correct judgement (any from agreement)
                 judgement = agreement[0]
                 # charge owner
-                crowdboximage.setOwner(crowdboximage.dropboxfile.client.uid)
+                crowdboximage.setOwner(crowdboximage.unit.input_data['uid'])
                 log.debug('crowdbox owner is %s ',crowdboximage.owner)
                 amount = settings.BUSINESS['price_per_image']
                 description = 'image processed: '+crowdboximage.unit.input_data['image_filename']
