@@ -5,7 +5,7 @@ from django.conf import settings
 from social_auth.models import UserSocialAuth
 from client_crowdcafe.sdk import Unit
 from client_dropbox.client import DropboxClient,DropboxFile
-import Decimal
+
 from account.models import Account, Membership, FundTransfer
 log = logging.getLogger(__name__)
 
