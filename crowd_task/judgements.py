@@ -27,13 +27,15 @@ def processCrowdCafeNewJudgement(data):
                 crowdboximage.dropboxfile.rename(crowdboximage.getFilenameForStatus(STATUS_DONE, crowdboximage.unit.input_data['image_filename']))
                 # pick correct judgement (any from agreement)
                 judgement = agreement[0]
+
+                makeOutputFromTaskResult(crowdboximage,judgement)
                 # charge owner
-                crowdboximage.setOwner(crowdboximage.unit.input_data['uid'])
+                '''crowdboximage.setOwner(crowdboximage.unit.input_data['uid'])
                 log.debug('crowdbox owner is %s ',crowdboximage.owner)
                 amount = settings.BUSINESS['price_per_image']
                 description = 'image processed: '+crowdboximage.unit.input_data['image_filename']
                 crowdboximage.chargeOwner(amount,description)
-                makeOutputFromTaskResult(crowdboximage,judgement)
+                '''
 
                 #update unit status as completed
                 unit.status = 'CD'
