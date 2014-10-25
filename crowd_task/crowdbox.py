@@ -129,6 +129,7 @@ class CrowdBoxImage:
     def setOwner(self, uid):
         social_user = UserSocialAuth.objects.get(uid=uid, provider='dropbox')
         self.user = social_user.user
+        log.debug('set owner, %s, %s',uid, self.user)
 
     def chargeOwner(self, amount, description):
         admin_account = Account.objects.get(pk = settings.BUSINESS['admin_account_id'])
