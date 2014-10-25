@@ -32,7 +32,7 @@ def processCrowdCafeNewJudgement(data):
                 makeOutputFromTaskResult(crowdboximage,judgement)
                 # charge owner
                 crowdboximage.setOwner(crowdboximage.unit.input_data['uid'])
-                log.debug('crowdbox owner is %s ',crowdboximage.owner)
+                log.debug('crowdbox owner is %s ',crowdboximage.user)
                 amount = settings.BUSINESS['price_per_image']
                 description = 'image processed: '+crowdboximage.unit.input_data['image_filename']
                 crowdboximage.chargeOwner(amount,description)
