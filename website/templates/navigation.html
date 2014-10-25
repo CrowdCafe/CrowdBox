@@ -4,6 +4,9 @@
 		<ul class="nav nav-pills pull-right">
             {% if user.is_authenticated %}
             <li>
+			<a href="{% url 'fundtransfer-list' user.profile.personalAccount %}">{{user.first_name}}</a>
+			</li>
+            <li>
 			<a href="{% url 'logout' %}">logout</a>
 			</li>
             {%endif%}
