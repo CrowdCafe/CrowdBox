@@ -36,7 +36,7 @@ def processCrowdCafeNewJudgement(data):
                 amount = settings.BUSINESS['price_per_image']
                 description = 'image processed: '+crowdboximage.unit.input_data['image_filename']
                 crowdboximage.chargeOwner(amount,description)
-                
+
 
                 #update unit status as completed
                 unit.status = 'CD'
