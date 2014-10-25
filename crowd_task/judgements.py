@@ -24,6 +24,7 @@ def processCrowdCafeNewJudgement(data):
             if agreement:
                 log.debug('agreement is found, %s',agreement)
                 crowdboximage = CrowdBoxImage(unit = unit)
+                log.debug('rename input file')
                 crowdboximage.dropboxfile.rename(crowdboximage.getFilenameForStatus(STATUS_DONE, crowdboximage.unit.input_data['image_filename']))
                 # pick correct judgement (any from agreement)
                 judgement = agreement[0]
