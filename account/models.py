@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch.dispatcher import receiver
 from social_auth.models import UserSocialAuth
+from django.conf import settings
 from decimal import Decimal
 from django.db.models import Sum
 import hashlib
@@ -142,8 +143,14 @@ def initUser(sender, **kwargs):
     # create a personal account
     account, created = Account.objects.get_or_create(creator = user, personal = True, title = 'personal account')
 
+    # if there are no transactions - give credit for registration
+    if FundTransfer.objects.count() == 0:
+        FundTransfer.objects.create(to_account = account, amount = settings.BUSINESS['registration_credit'], description = 'credit for registration')
     # add current user to this account with Admin permission
     membership, created = Membership.objects.get_or_create(user = user, permission = 'AN', account = account)
+
+    # add current user to this account with Admin permission
+
 
 def receivePayment(sender, **kwargs):
     ipn_obj = sender

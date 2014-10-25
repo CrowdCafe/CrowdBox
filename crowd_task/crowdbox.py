@@ -2,10 +2,11 @@ import logging
 
 from django.core.urlresolvers import reverse
 from django.conf import settings
-
+from social_auth.models import UserSocialAuth
 from client_crowdcafe.sdk import Unit
 from client_dropbox.client import DropboxClient,DropboxFile
 
+from models import Account, Membership, FundTransfer
 log = logging.getLogger(__name__)
 
 IMAGE_STATUSES = ('syncing','working','completed','result')
@@ -27,6 +28,7 @@ class CrowdBoxImage:
         else:
             self.unit = unit
         self.dropboxfile = dropboxfile
+        self.user = None
         if not self.dropboxfile:
             self.getDropboxFile()
     # ---------------------------------------------------------
@@ -122,3 +124,16 @@ class CrowdBoxImage:
 
     def getMaskPoints(self,canvaspolygon):
         return canvaspolygon.polygon.getSequence()
+    # ---------------------------------------------------------
+    # Other
+    def setOwner(self, uid):
+        social_user = UserSocialAuth.objects.get(uid=uid, provider='dropbox')
+        self.user = social_user.user
+
+    def chargeOwner(self, amount, description):
+        admin_account = Account.objects.get(pk = settings.BUSINESS['admin_account_id'])
+        if self.user:
+            payment = FundTransfer.objects.create(to_account = admin_account,from_account = self.user.profile.personalAccount, amount = amount, description = description)
+
+
+

@@ -5,6 +5,7 @@ from client_crowdcafe.sdk import Judgement
 from crowdbox import CrowdBoxImage,STATUS_DONE
 from crowd_task.utils.evaluation import findAgreement
 from crowd_io.io import makeOutputFromTaskResult
+from django.conf import settings
 
 log = logging.getLogger(__name__)
 def processCrowdCafeNewJudgement(data):
@@ -28,6 +29,11 @@ def processCrowdCafeNewJudgement(data):
                 # pick correct judgement (any from agreement)
                 judgement = agreement[0]
                 makeOutputFromTaskResult(crowdboximage,judgement)
+                # charge owner
+                crowdboximage.setOwner(unit.dropboxfile.client.uid)
+                amount = settings.BUSINESS['price_per_image']
+                description = 'image processed: '+crowdboximage.unit.input_data['image_filename']
+                crowdboximage.chargeOwner(amount,description)
                 #update unit status as completed
                 unit.status = 'CD'
             else:

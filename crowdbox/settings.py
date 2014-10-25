@@ -41,6 +41,12 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+BUSINESS = {
+    'admin_account_id':1,
+    'price_per_image':0.20,
+    'registration_credit':1.00
+}
+
 ALLOWED_HOSTS = ['crowdbox.me','crowdbox.me:8000','80.240.134.163','localhost']
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')

@@ -303,6 +303,7 @@ class FundTransferListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(FundTransferListView, self).get_context_data(**kwargs)
+        context['account'] = get_object_or_404(Account, pk=self.kwargs.get('account_pk', None))
         return context
 
 

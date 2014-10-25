@@ -3,7 +3,8 @@
 
 {% block title%}
 <div class='container'>
-	<h1>Fund Transfers</h1>
+	<h4 class="center">History</h4>
+<h5 class="center">Balance: {{ account.balance }}&euro;</h5>
 </div>
 {% endblock%}
 
@@ -11,21 +12,17 @@
 <div class="container">
 	<table class='table table-hover'>
 		{% for transfer in object_list %}
-		<tr>
-			<td>#{{forloop.counter}}
-			</td>
-			<td>{{transfer.from_account.title}} #{{transfer.from_account.id}}
-			</td>
-			<td>{{transfer.to_account.title}} #{{transfer.to_account.id}}
+		<tr {% if transfer.to_account = account %}class='success'{% endif %}>
+            <td>{{transfer.date_created}}
 			</td>
 			<td>{{transfer.amount}}&euro;
 			</td>
 			<td>{{transfer.description}}
 			</td>
-		</div>
-	</tr>
+	    </tr>
 	{% empty %}
-	<h3>No transfers yet.</h3>
+	<h5>No transactions yet.</h5>
 	{% endfor %}
+    </table>
 </div>
 {% endblock%}
