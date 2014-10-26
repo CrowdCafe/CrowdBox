@@ -6,7 +6,7 @@
         <img src="{% static 'img/logo_256.jpg' %}">
         <h3 class='center'>Make the crowd crop objects on images you want.</h3>
         <p>
-            <a href="{% url 'socialauth_begin' 'dropbox' %}" class="btn btn-lg btn-dropbox-inversed">
+            <a href="{% url 'socialauth_begin' 'dropbox' %}?next={% url 'website-info' %}" class="btn btn-lg btn-dropbox-inversed">
                 <i class="fa fa-dropbox"></i> login via Dropbox
             </a>
             <a href="{% url 'website-info'%}" class="btn btn-lg btn-default">
