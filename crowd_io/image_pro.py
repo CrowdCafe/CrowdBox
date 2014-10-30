@@ -6,7 +6,6 @@ from PIL import Image, ImageDraw, ExifTags
 import requests
 from StringIO import StringIO
 import logging
-#import pyexiv2
 from random import randint
 import os
 
@@ -82,6 +81,7 @@ def orientImage(image):
         for k, v in image._getexif().items()
         if k in ExifTags.TAGS
     }
+
     log.debug('exif data %s',exif)
     if 'Exif.Image.Orientation' in image.info['exif']:
         orientation = image['Exif.Image.Orientation']

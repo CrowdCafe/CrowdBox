@@ -34,7 +34,7 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     original_image = getImageViaUrl(crowdcafeimage.dropboxfile.getMediaURL())
     # orient image according to Orientation from EXIF data
     original_image = orientImage(original_image)
-    
+
     canvaspolygon = CanvasPolygon(judgement.output_data)
     # scale polygon of the judgement
     canvaspolygon = crowdcafeimage.getScaledPolygon(original_image, canvaspolygon)
@@ -50,10 +50,6 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     mask = mask.crop((corners[0]['x'], corners[0]['y'], corners[1]['x'], corners[1]['y']))
     # place on background
     result_image = placeMaskOnBackground(mask)
-    '''
-    # place image in buffer
-    buffer = bufferImage(result_image)
-    '''
     # copy EXIF
     result_file = copyExifData(settings.MEDIA_ROOT, original_image,result_image)
     f = open(result_file, 'rb')
