@@ -52,11 +52,47 @@ def copyExifData(media_root, image_from, image_to):
 
     os.chmod(media_root,0777)
     exif = image_from.info['exif']
+    log.debug('EXIF data of the image is: %s',exif)
 
     image_to.save(filepath_to, 'JPEG', exif = exif)
     return filepath_to
 
-
-    return filepath_to
 def getRandomImageName(key):
     return key+'_'+str(randint(10000,99999))+'.jpeg'
+
+# http://stackoverflow.com/questions/1606587/how-to-use-pil-to-resize-and-apply-rotation-exif-information-to-the-file
+
+def orientImage(image):
+    # We rotate regarding to the EXIF orientation information
+    if 'Exif.Image.Orientation' in image.info['exif']:
+        orientation = image['Exif.Image.Orientation']
+        if orientation == 1:
+            # Nothing
+            mirror = image.copy()
+        elif orientation == 2:
+            # Vertical Mirror
+            mirror = image.transpose(Image.FLIP_LEFT_RIGHT)
+        elif orientation == 3:
+            # Rotation 180°
+            mirror = image.transpose(Image.ROTATE_180)
+        elif orientation == 4:
+            # Horizontal Mirror
+            mirror = image.transpose(Image.FLIP_TOP_BOTTOM)
+        elif orientation == 5:
+            # Horizontal Mirror + Rotation 90° CCW
+            mirror = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_90)
+        elif orientation == 6:
+            # Rotation 270°
+            mirror = image.transpose(Image.ROTATE_270)
+        elif orientation == 7:
+            # Horizontal Mirror + Rotation 270°
+            mirror = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
+        elif orientation == 8:
+            # Rotation 90°
+            mirror = image.transpose(Image.ROTATE_90)
+
+        # No more Orientation information
+        # image['Exif.Image.Orientation'] = 1
+    else:
+        # No EXIF information, the user has to do it
+        mirror = image.copy()
