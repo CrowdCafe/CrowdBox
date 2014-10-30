@@ -1,4 +1,5 @@
 __author__ = 'pavelk'
+# -*- coding: utf-8 -*-
 import numpy
 from PIL import Image, ImageDraw
 
@@ -73,22 +74,22 @@ def orientImage(image):
             # Vertical Mirror
             mirror = image.transpose(Image.FLIP_LEFT_RIGHT)
         elif orientation == 3:
-            # Rotation 180°
+            # Rotation 180
             mirror = image.transpose(Image.ROTATE_180)
         elif orientation == 4:
             # Horizontal Mirror
             mirror = image.transpose(Image.FLIP_TOP_BOTTOM)
         elif orientation == 5:
-            # Horizontal Mirror + Rotation 90° CCW
+            # Horizontal Mirror + Rotation 90 CCW
             mirror = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_90)
         elif orientation == 6:
-            # Rotation 270°
+            # Rotation 270
             mirror = image.transpose(Image.ROTATE_270)
         elif orientation == 7:
-            # Horizontal Mirror + Rotation 270°
+            # Horizontal Mirror + Rotation 270
             mirror = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
         elif orientation == 8:
-            # Rotation 90°
+            # Rotation 90
             mirror = image.transpose(Image.ROTATE_90)
 
         # No more Orientation information
