@@ -33,6 +33,7 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     # get original image
     original_image = getImageViaUrl(crowdcafeimage.dropboxfile.getMediaURL())
     # orient image according to Orientation from EXIF data
+    log.debug('start orienting image before')
     original_image = orientImage(original_image)
 
     canvaspolygon = CanvasPolygon(judgement.output_data)

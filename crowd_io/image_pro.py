@@ -62,6 +62,7 @@ def getRandomImageName(key):
 # http://stackoverflow.com/questions/1606587/how-to-use-pil-to-resize-and-apply-rotation-exif-information-to-the-file
 
 def orientImage(image):
+    log.debug('start orienting image inside')
     '''
     EXIF Orientations:
       1        2       3      4         5            6           7          8
@@ -81,7 +82,7 @@ def orientImage(image):
         for k, v in image._getexif().items()
         if k in ExifTags.TAGS
     }
-
+    log.debug('exif data will be:')
     log.debug('exif data %s',exif)
     if 'Exif.Image.Orientation' in image.info['exif']:
         orientation = image['Exif.Image.Orientation']
