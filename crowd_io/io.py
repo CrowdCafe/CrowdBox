@@ -6,7 +6,7 @@ from client_dropbox.client import DropboxClient,DropboxFile
 from crowd_task.crowdbox import CrowdBoxImage, RSLT_FOLDER,STATUS_RSLT
 from image_pro import getImageViaUrl
 from crowd_task.utils.evaluation import CanvasPolygon
-from image_pro import maskImage,placeMaskOnBackground,bufferImage,copyExifData
+from image_pro import maskImage,placeMaskOnBackground,bufferImage,copyExifData, orientImage
 import os
 
 
@@ -32,6 +32,9 @@ def processDropboxWebhook(data,domain):
 def makeOutputFromTaskResult(crowdcafeimage, judgement):
     # get original image
     original_image = getImageViaUrl(crowdcafeimage.dropboxfile.getMediaURL())
+    # orient image according to Orientation from EXIF data
+    original_image = orientImage(original_image)
+    
     canvaspolygon = CanvasPolygon(judgement.output_data)
     # scale polygon of the judgement
     canvaspolygon = crowdcafeimage.getScaledPolygon(original_image, canvaspolygon)

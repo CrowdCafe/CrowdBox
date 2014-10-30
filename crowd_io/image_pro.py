@@ -1,7 +1,7 @@
 __author__ = 'pavelk'
 # -*- coding: utf-8 -*-
 import numpy
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ExifTags
 
 import requests
 from StringIO import StringIO
@@ -53,7 +53,6 @@ def copyExifData(media_root, image_from, image_to):
 
     os.chmod(media_root,0777)
     exif = image_from.info['exif']
-    log.debug('EXIF data of the image is: %s',exif)
 
     image_to.save(filepath_to, 'JPEG', exif = exif)
     return filepath_to
@@ -64,7 +63,26 @@ def getRandomImageName(key):
 # http://stackoverflow.com/questions/1606587/how-to-use-pil-to-resize-and-apply-rotation-exif-information-to-the-file
 
 def orientImage(image):
+    '''
+    EXIF Orientations:
+      1        2       3      4         5            6           7          8
+
+    888888  888888      88  88      8888888888  88                  88  8888888888
+    88          88      88  88      88  88      88  88          88  88      88  88
+    8888      8888    8888  8888    88          8888888888  8888888888          88
+    88          88      88  88
+    88          88  888888  888888
+
+    '''
     # We rotate regarding to the EXIF orientation information
+    mirror = image.copy()
+
+    exif = {
+        ExifTags.TAGS[k]: v
+        for k, v in image._getexif().items()
+        if k in ExifTags.TAGS
+    }
+    log.debug('exif data %s',exif)
     if 'Exif.Image.Orientation' in image.info['exif']:
         orientation = image['Exif.Image.Orientation']
         if orientation == 1:
@@ -91,9 +109,4 @@ def orientImage(image):
         elif orientation == 8:
             # Rotation 90
             mirror = image.transpose(Image.ROTATE_90)
-
-        # No more Orientation information
-        # image['Exif.Image.Orientation'] = 1
-    else:
-        # No EXIF information, the user has to do it
-        mirror = image.copy()
+    return mirror
