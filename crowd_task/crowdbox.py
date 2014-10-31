@@ -116,13 +116,6 @@ class CrowdBoxImage:
         # update filename at dropbox
         self.dropboxfile.rename(work_filename)
     # ---------------------------------------------------------
-    # Image processing
-    def getScaledPolygon(self, original_image, canvaspolygon):
-        canvaspolygon.orient(original_image)
-        width, height = original_image.size
-        canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['height'],1.0*height/canvaspolygon.canvas['width'])
-        return canvaspolygon
-
     def getMaskPoints(self,canvaspolygon):
         return canvaspolygon.polygon.getSequence()
     # ---------------------------------------------------------

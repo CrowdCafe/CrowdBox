@@ -37,7 +37,7 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     # get canvaspolygon
     canvaspolygon = CanvasPolygon(judgement.output_data)
     # scale polygon of the judgement
-    canvaspolygon = crowdcafeimage.getScaledPolygon(original_image, canvaspolygon)
+    canvaspolygon.scale(original_image)
     # add margins to polygon
     canvaspolygon.polygon.enlargeAbs(settings.MARBLE_3D_ENLARGE_POLYGON)
     # get Mask points

@@ -27,7 +27,8 @@ class CanvasPolygon:
                     self.polygon = Polygon(getPolygonPoints(shape))
     
 
-    def orient(self, original_image):
+    def scale(self, original_image):
+        width, height = original_image.size
         exif = getExifDictionary(original_image)
         log.debug('exif data of the image is: %s',exif)
         orientation = exif['Orientation']
@@ -41,18 +42,28 @@ class CanvasPolygon:
         #   8 - bottom right (90)
         old_canvas = self.canvas
         if orientation == 1:
+            log.debug('orientation is 1')
             self.polygon.points = self.polygon.points
+            self.polygon.scale(1.0*width/self.canvas['width'],1.0*height/self.canvas['height'])
         elif orientation == 6:
+            log.debug('orientation is 6')
             self.canvas['height']=old_canvas['width']
             self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':p['y'],'y':self.canvas['height']-p['x']} for p in self.polygon.points]
+            self.polygon.scale(1.0*height/self.canvas['width'],1.0*width/self.canvas['height'])
         elif orientation == 3:
+            log.debug('orientation is 3')
             self.polygon.points = [{'x':self.canvas['height']-p['x'],'y':self.canvas['weight']-p['y']} for p in self.polygon.points]
+            self.polygon.scale(1.0*width/self.canvas['width'],1.0*height/self.canvas['height'])
         elif orientation == 8:
+            log.debug('orientation is 8')
             self.canvas['height']=old_canvas['width']
             self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':self.canvas['weight']-p['y'],'y':p['x']} for p in self.polygon.points]
-    
+            self.polygon.scale(1.0*height/self.canvas['width'],1.0*width/self.canvas['height'])
+        else:
+            log.debug('orientation is different')
+            self.polygon.scale(1.0*width/self.canvas['width'],1.0*height/self.canvas['height'])
     def isValid(self):
         if '_shapes' in self.data:
             return True
