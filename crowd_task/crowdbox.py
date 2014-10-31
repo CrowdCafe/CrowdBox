@@ -120,7 +120,7 @@ class CrowdBoxImage:
     def getScaledPolygon(self, original_image, canvaspolygon):
         canvaspolygon.orient(original_image)
         width, height = original_image.size
-        canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['height'],1.0*height/canvaspolygon.canvas['weight'])
+        canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['height'],1.0*height/canvaspolygon.canvas['width'])
         return canvaspolygon
 
     def getMaskPoints(self,canvaspolygon):
