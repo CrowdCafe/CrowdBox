@@ -69,6 +69,14 @@ def getRandomImageName(key):
 #    and-apply-rotation-exif-information-to-the-file
 
 
+def getExifDictionary(image):
+    return {
+        ExifTags.TAGS[k]: v
+        for k, v in image._getexif().items()
+        if k in ExifTags.TAGS
+    }
+
+
 def orientImage(image):
     log.debug('start orienting image inside')
     # We rotate regarding to the EXIF orientation information

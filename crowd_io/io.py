@@ -6,7 +6,7 @@ from client_dropbox.client import DropboxClient,DropboxFile
 from crowd_task.crowdbox import CrowdBoxImage, RSLT_FOLDER,STATUS_RSLT
 from image_pro import getImageViaUrl
 from crowd_task.utils.evaluation import CanvasPolygon
-from image_pro import maskImage,placeMaskOnBackground,copyExifData
+from image_pro import maskImage,placeMaskOnBackground,copyExifData,getExifDictionary
 import os
 
 
@@ -36,10 +36,10 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     original_image = getImageViaUrl(crowdcafeimage.dropboxfile.getMediaURL())
     # get canvaspolygon
     canvaspolygon = CanvasPolygon(judgement.output_data)
-    # get orientation from EXIF data of the image
-    orientation = original_image['Exif.Image.Orientation']
-    # orient canvaspolygon according to orientation
-    canvaspolygon.orient(orientation)
+    # get Exif data of the image
+    exif = getExifDictionary(original_image)
+    # orient canvaspolygon according to orientation from EXIF data
+    canvaspolygon.orient(exif['Orientation'])
     # scale polygon of the judgement
     canvaspolygon = crowdcafeimage.getScaledPolygon(original_image, canvaspolygon)
     # add margins to polygon
