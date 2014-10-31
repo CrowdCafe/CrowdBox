@@ -41,7 +41,7 @@ class CanvasPolygon:
         if orientation == 1:
             self.polygon.points = self.polygon.points
         elif orientation == 6:
-            self.polygon.points = [{'x':p['x'],'y':self.canvas['width']-p['y']} for p in self.polygon.points]
+            self.polygon.points = [{'x':p['y'],'y':self.canvas['width']-p['x']} for p in self.polygon.points]
         elif orientation == 3:
             self.polygon.points = [{'x':self.canvas['width']-p['x'],'y':self.canvas['height']-p['y']} for p in self.polygon.points]
         elif orientation == 8:
