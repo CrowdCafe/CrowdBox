@@ -39,11 +39,10 @@ class CanvasPolygon:
         #   6 - top right (270), 
         #   3 - bottom left (180)
         #   8 - bottom right (90)
-
+        old_canvas = self.canvas
         if orientation == 1:
             self.polygon.points = self.polygon.points
         elif orientation == 6:
-            old_canvas = self.canvas
             self.canvas['height']=old_canvas['width']
             self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':p['y'],'y':self.canvas['height']-p['x']} for p in self.polygon.points]
