@@ -2,12 +2,14 @@ __author__ = 'pavelk'
 import logging
 
 from client_crowdcafe.sdk import Judgement
-from crowdbox import CrowdBoxImage,STATUS_DONE
+from crowdbox import CrowdBoxImage, STATUS_DONE
 from crowd_task.utils.evaluation import findAgreement
 from crowd_io.io import makeOutputFromTaskResult
 from django.conf import settings
 
 log = logging.getLogger(__name__)
+
+
 def processCrowdCafeNewJudgement(data):
     for item in data:
         # get judgement

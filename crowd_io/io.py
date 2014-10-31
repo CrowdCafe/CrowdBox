@@ -6,13 +6,14 @@ from client_dropbox.client import DropboxClient,DropboxFile
 from crowd_task.crowdbox import CrowdBoxImage, RSLT_FOLDER,STATUS_RSLT
 from image_pro import getImageViaUrl
 from crowd_task.utils.evaluation import CanvasPolygon
-from image_pro import maskImage,placeMaskOnBackground,bufferImage,copyExifData, orientImage
+from image_pro import maskImage,placeMaskOnBackground,copyExifData
 import os
 
 
 log = logging.getLogger(__name__)
 
-def processDropboxWebhook(data,domain):
+
+def processDropboxWebhook(data, domain):
     # we received list of judgements data
     log.debug('data from dropbox: %s', data)
     # to iterate list of users for whom there are any dropbox updates
@@ -20,23 +21,25 @@ def processDropboxWebhook(data,domain):
         dropboxclient = DropboxClient(uid)
         # get the latest updated files for a given user
         updates = dropboxclient.checkUpdates()
-        log.debug('updates for user %s, are %s',str(uid),updates)
+        log.debug('updates for user %s, are %s', str(uid), updates)
         # iterate the list of updated files
-        for path, metadata  in updates:
+        for path, metadata in updates:
             dropboxfile = DropboxFile(dropboxclient, path)
             # if updated file is an image
             if dropboxfile.isImage():
-                crowdboximage = CrowdBoxImage(dropboxfile = dropboxfile)
+                crowdboximage = CrowdBoxImage(dropboxfile=dropboxfile)
                 crowdboximage.processFileUpdate(domain)
+
 
 def makeOutputFromTaskResult(crowdcafeimage, judgement):
     # get original image
     original_image = getImageViaUrl(crowdcafeimage.dropboxfile.getMediaURL())
-    # orient image according to Orientation from EXIF data
-    log.debug('start orienting image before')
-    original_image = orientImage(original_image)
-
+    # get canvaspolygon
     canvaspolygon = CanvasPolygon(judgement.output_data)
+    # get orientation from EXIF data of the image
+    orientation = original_image['Exif.Image.Orientation']
+    # orient canvaspolygon according to orientation
+    canvaspolygon.orient(orientation)
     # scale polygon of the judgement
     canvaspolygon = crowdcafeimage.getScaledPolygon(original_image, canvaspolygon)
     # add margins to polygon

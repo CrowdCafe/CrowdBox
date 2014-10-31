@@ -16,7 +16,6 @@ class Edge:
 class Polygon:
     def __init__(self, points):
         self.points = points
-
     def offset(self, distance):
         self.points.append(self.points[0])
         line = LineString(self.getSequence())

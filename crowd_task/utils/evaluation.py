@@ -24,6 +24,21 @@ class CanvasPolygon:
                     self.polygon = Polygon(getRectangleCoordinates(shape))
                 if shape['type'] == 'polygon':
                     self.polygon = Polygon(getPolygonPoints(shape))
+    def orient(self,orientation):
+        # orientation: 
+        #   1 - top left (nothing),
+        #   6 - top right (270), 
+        #   3 - bottom left (180)
+        #   8 - bottom right (90)
+        if orientation == 1:
+            self.polygon.points = self.polygon.points
+        elif orientation == 2:
+            self.polygon.points = [{'x':p['x'],'y':self.canvas['width']-p['y']} for p in self.polygon.points]
+        elif orientation == 3:
+            self.polygon.points = [{'x':self.canvas['width']-p['x'],'y':self.canvas['height']-p['y']} for p in self.polygon.points]
+        elif orientation == 4:
+            self.polygon.points = [{'x':self.canvas['height']-p['y'],'y':p['x']} for p in self.polygon.points]
+
     def isValid(self):
         if '_shapes' in self.data:
             return True
