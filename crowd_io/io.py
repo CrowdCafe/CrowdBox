@@ -36,9 +36,6 @@ def makeOutputFromTaskResult(crowdcafeimage, judgement):
     original_image = getImageViaUrl(crowdcafeimage.dropboxfile.getMediaURL())
     # get canvaspolygon
     canvaspolygon = CanvasPolygon(judgement.output_data)
-    # get Exif data of the image
-    # orient canvaspolygon according to orientation from EXIF data
-    canvaspolygon.orient(original_image)
     # scale polygon of the judgement
     canvaspolygon = crowdcafeimage.getScaledPolygon(original_image, canvaspolygon)
     # add margins to polygon

@@ -25,7 +25,9 @@ class CanvasPolygon:
                     self.polygon = Polygon(getRectangleCoordinates(shape))
                 if shape['type'] == 'polygon':
                     self.polygon = Polygon(getPolygonPoints(shape))
-    def orient(self,original_image):
+    
+
+    def orient(self, original_image):
         exif = getExifDictionary(original_image)
         log.debug('exif data of the image is: %s',exif)
         orientation = exif['Orientation']
@@ -41,11 +43,17 @@ class CanvasPolygon:
         if orientation == 1:
             self.polygon.points = self.polygon.points
         elif orientation == 6:
+            old_canvas = self.canvas
+            self.canvas['height']=old_canvas['width']
+            self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':p['y'],'y':self.canvas['height']-p['x']} for p in self.polygon.points]
         elif orientation == 3:
             self.polygon.points = [{'x':self.canvas['height']-p['x'],'y':self.canvas['weight']-p['y']} for p in self.polygon.points]
         elif orientation == 8:
+            self.canvas['height']=old_canvas['width']
+            self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':self.canvas['weight']-p['y'],'y':p['x']} for p in self.polygon.points]
+    
     def isValid(self):
         if '_shapes' in self.data:
             return True

@@ -5,6 +5,7 @@ from django.conf import settings
 from social_auth.models import UserSocialAuth
 from client_crowdcafe.sdk import Unit
 from client_dropbox.client import DropboxClient,DropboxFile
+from crowd_io.image_pro import getExifDictionary
 
 from account.models import Account, FundTransfer
 log = logging.getLogger(__name__)
@@ -117,6 +118,7 @@ class CrowdBoxImage:
     # ---------------------------------------------------------
     # Image processing
     def getScaledPolygon(self, original_image, canvaspolygon):
+        canvaspolygon.orient(original_image)
         width, height = original_image.size
         canvaspolygon.polygon.scale(1.0*width/canvaspolygon.canvas['width'],1.0*height/canvaspolygon.canvas['height'])
         return canvaspolygon
