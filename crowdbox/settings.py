@@ -133,7 +133,7 @@ LOGGING = {
                 'level':'DEBUG',
                 'class':'logging.handlers.RotatingFileHandler',
                 'filename': "/var/log/django/crowdbox.log",
-                'maxBytes': 50000,
+                'maxBytes': 500000,
                 'backupCount': 3,
                 'formatter': 'standard'
         },
@@ -147,11 +147,11 @@ LOGGING = {
         'django': {
             'handlers': ['console','logfile'],
             'propagate': True,
-            'level': 'WARN',
+            'level': 'DEBUG',
         },
         'django.db.backends': {
             'handlers': ['console','logfile'],
-            'level': 'WARNING',
+            'level': 'DEBUG',
             'propagate': False,
         },
         'background_tasks': {
@@ -160,12 +160,12 @@ LOGGING = {
             'propagate': False,
         },
         'client_dropbox': {
-            'handlers': ['console'],
+            'handlers': ['console','logfile'],
             'level': 'DEBUG',
             'propagate': False,
         },
         'client_crowdcafe': {
-            'handlers': ['console'],
+            'handlers': ['console','logfile'],
             'level': 'DEBUG',
             'propagate': False,
         },
