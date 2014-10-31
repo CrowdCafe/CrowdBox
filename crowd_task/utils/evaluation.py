@@ -41,11 +41,11 @@ class CanvasPolygon:
         if orientation == 1:
             self.polygon.points = self.polygon.points
         elif orientation == 6:
-            self.polygon.points = [{'x':p['y'],'y':self.canvas['width']-p['x']} for p in self.polygon.points]
+            self.polygon.points = [{'x':p['y'],'y':self.canvas['height']-p['x']} for p in self.polygon.points]
         elif orientation == 3:
-            self.polygon.points = [{'x':self.canvas['width']-p['x'],'y':self.canvas['height']-p['y']} for p in self.polygon.points]
+            self.polygon.points = [{'x':self.canvas['height']-p['x'],'y':self.canvas['weight']-p['y']} for p in self.polygon.points]
         elif orientation == 8:
-            self.polygon.points = [{'x':self.canvas['height']-p['y'],'y':p['x']} for p in self.polygon.points]
+            self.polygon.points = [{'x':self.canvas['weight']-p['y'],'y':p['x']} for p in self.polygon.points]
     def isValid(self):
         if '_shapes' in self.data:
             return True
