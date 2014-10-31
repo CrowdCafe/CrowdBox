@@ -9,6 +9,7 @@ from django.conf import settings
 from coordinates import getRectangleCoordinates, getPolygonPoints, getCanvasSize
 from polygons import Polygon, Edge
 import itertools
+from crowd_io.image_pro import getExifDictionary
 
 class CanvasPolygon:
     def __init__(self, data):
@@ -24,7 +25,10 @@ class CanvasPolygon:
                     self.polygon = Polygon(getRectangleCoordinates(shape))
                 if shape['type'] == 'polygon':
                     self.polygon = Polygon(getPolygonPoints(shape))
-    def orient(self,orientation):
+    def orient(self,original_image):
+        exif = getExifDictionary(original_image)
+        log.debug('exif data of the image is: %s',exif)
+        orientation = exif['Orientation']
         # get orientation from EXIF data of the image
         log.debug('orientation is: %s',orientation)
         
