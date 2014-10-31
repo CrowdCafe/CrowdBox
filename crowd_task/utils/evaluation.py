@@ -40,16 +40,17 @@ class CanvasPolygon:
         #   6 - top right (270), 
         #   3 - bottom left (180)
         #   8 - bottom right (90)
-        old_canvas = self.canvas
+        canvas_width = self.canvas['width']
+        canvas_height = self.canvas['height']
         if orientation == 1:
             log.debug('orientation is 1')
             self.polygon.points = self.polygon.points
             self.polygon.scale(1.0*width/self.canvas['width'],1.0*height/self.canvas['height'])
         elif orientation == 6:
             log.debug('orientation is 6')
-            self.canvas['height']=old_canvas['width']
-            self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':p['y'],'y':self.canvas['height']-p['x']} for p in self.polygon.points]
+            self.canvas['height'] = canvas_width
+            self.canvas['width'] = canvas_height
             self.polygon.scale(1.0*height/self.canvas['width'],1.0*width/self.canvas['height'])
         elif orientation == 3:
             log.debug('orientation is 3')
@@ -57,9 +58,9 @@ class CanvasPolygon:
             self.polygon.scale(1.0*width/self.canvas['width'],1.0*height/self.canvas['height'])
         elif orientation == 8:
             log.debug('orientation is 8')
-            self.canvas['height']=old_canvas['width']
-            self.canvas['width']=old_canvas['height']
             self.polygon.points = [{'x':self.canvas['weight']-p['y'],'y':p['x']} for p in self.polygon.points]
+            self.canvas['height'] = canvas_width
+            self.canvas['width'] = canvas_height
             self.polygon.scale(1.0*height/self.canvas['width'],1.0*width/self.canvas['height'])
         else:
             log.debug('orientation is different')
