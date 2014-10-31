@@ -34,7 +34,7 @@ class CanvasPolygon:
         orientation = exif['Orientation']
         # get orientation from EXIF data of the image
         log.debug('orientation is: %s',orientation)
-        
+        log.debug('polygon canvas %s and points %s before:',self.canvas,self.polygon.points)
         # orientation: 
         #   1 - top left (nothing),
         #   6 - top right (270), 
@@ -64,6 +64,7 @@ class CanvasPolygon:
         else:
             log.debug('orientation is different')
             self.polygon.scale(1.0*width/self.canvas['width'],1.0*height/self.canvas['height'])
+        log.debug('polygon canvas %s and points %s after:',self.canvas,self.polygon.points)
     def isValid(self):
         if '_shapes' in self.data:
             return True
