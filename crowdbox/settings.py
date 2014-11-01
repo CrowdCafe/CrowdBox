@@ -38,7 +38,6 @@ MARBLE_3D_ENLARGE_POLYGON = 100
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-DOMAIN = "crowdbox.me"
 APP_URL = "http://"+DOMAIN+'/'
 TEMPLATE_DEBUG = True
 
