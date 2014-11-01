@@ -47,7 +47,7 @@ BUSINESS = {
     'registration_credit':1.00
 }
 
-ALLOWED_HOSTS = ['dev.crowdbox.me','crowdbox.me','crowdbox.me:8000','80.240.134.163','localhost']
+ALLOWED_HOSTS = ['dev.crowdbox.me:8000','dev.crowdbox.me','crowdbox.me','crowdbox.me:8000','80.240.134.163','localhost']
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
