@@ -38,7 +38,8 @@ MARBLE_3D_ENLARGE_POLYGON = 100
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
+DOMAIN = "crowdbox.me"
+APP_URL = "http://"+DOMAIN+'/'
 TEMPLATE_DEBUG = True
 
 BUSINESS = {
@@ -115,7 +116,7 @@ if DEBUG:
     loggin_filename = DOMAIN+'_debug.log'
 else:
     logging_level = 'WARNING'
-    loggin_filename = DOMAIN+'_production.log'
+    logging_filename = DOMAIN+'_production.log'
 
 LOGGING = {
     'version': 1,
@@ -143,7 +144,7 @@ LOGGING = {
         'logfile': {
                 'level':logging_level,
                 'class':'logging.handlers.RotatingFileHandler',
-                'filename': "/var/log/django/"+loggin_filename,
+                'filename': "/var/log/django/"+logging_filename,
                 'maxBytes': 500000,
                 'backupCount': 3,
                 'formatter': 'standard'
@@ -199,8 +200,7 @@ LOGGING = {
 
     }
 }
-DOMAIN = "crowdbox.me"
-APP_URL = "http://"+DOMAIN+'/'
+
 # PayPal account on which requestors send money
 # ---------------------------------------------------------------
 PAYPAL_RECEIVER_EMAIL = "pavel@crowdcafe.io"
