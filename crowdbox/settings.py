@@ -58,7 +58,7 @@ BOWER_INSTALLED_APPS = (
     'jquery',
 )
 
-CRISPY_TEMPLATE_PACK = 'bootstrap3' 
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # Application definition
 
 INSTALLED_APPS = (
@@ -76,6 +76,10 @@ INSTALLED_APPS = (
     'dropbox',
     'djcelery',
     'djrill',
+    'client_dropbox',
+    'client_crowdcafe',
+    'crowd_task',
+    'crowd_io',
     #'paypal.standard.ipn',
     #'djkombu',
     'kombu.transport.django',
@@ -106,11 +110,18 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
 )
 
+if DEBUG:
+    logging_level = 'DEBUG'
+    loggin_filename = 'crowdbox_debug.log'
+else:
+    logging_level = 'WARNING'
+    loggin_filename = 'crowdbox_production.log'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'formatters': {
-        'standard': {
+        "standard": {
             'format': "[%(asctime)s] %(levelname)s [%(name)s.%(funcName)s:%(lineno)s] %(message)s",
             'datefmt': "%d/%b/%Y %H:%M:%S"
         },
@@ -130,9 +141,9 @@ LOGGING = {
             'formatter': 'standard'
         },
         'logfile': {
-                'level':'DEBUG',
+                'level':logging_level,
                 'class':'logging.handlers.RotatingFileHandler',
-                'filename': "/var/log/django/crowdbox.log",
+                'filename': "/var/log/django/"+loggin_filename,
                 'maxBytes': 500000,
                 'backupCount': 3,
                 'formatter': 'standard'
@@ -146,42 +157,43 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console','logfile'],
+            'level': 'WARNING',
             'propagate': True,
-            'level': 'DEBUG',
+            
         },
         'django.db.backends': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'propagate': False,
         },
         'background_tasks': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': logging_level,
             'propagate': False,
         },
         'client_dropbox': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': logging_level,
             'propagate': False,
         },
         'client_crowdcafe': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': logging_level,
             'propagate': False,
         },
         'crowd_io': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': logging_level,
             'propagate': False,
         },
         'crowd_task': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': logging_level,
             'propagate': False,
         },
         'celery': {
             'handlers': ['console','logfile'],
-            'level': 'DEBUG',
+            'level': logging_level,
             'propagate': False
         }
 

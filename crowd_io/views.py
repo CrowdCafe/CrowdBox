@@ -3,7 +3,7 @@ import logging
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
-
+from django.conf import settings
 from background_tasks.tasks import backgroundDropboxWebhook
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,10 @@ def webhook_dropbox(request):
     elif request.method == 'POST':
         if request.body:
             data = json.loads(request.body)
-            backgroundDropboxWebhook.delay(data, request.build_absolute_uri('/'))
+            if settings.DEBUG:
+                backgroundDropboxWebhook(data, request.build_absolute_uri('/'))
+            else:
+                backgroundDropboxWebhook.delay(data, request.build_absolute_uri('/'))
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=405)

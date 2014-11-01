@@ -3,7 +3,7 @@ import logging
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.conf import settings
 from client_dropbox.client import DropboxClient
 from client_crowdcafe.sdk import Judgement
 from crowd_task.utils.evaluation import CanvasPolygon, CanvasPolygonSimilarity
@@ -53,6 +53,9 @@ def receiveNewJudgement(request):
         log.debug('request.body %s',request.body)
         data = json.loads(request.body)
         log.debug('request body: %s', data)
-        backgroundCrowdCafeWebhook.delay(data)
+        if settings.DEBUG:
+            backgroundCrowdCafeWebhook(data)
+        else:
+            backgroundCrowdCafeWebhook.delay(data)
         return HttpResponse(status=200)
     return HttpResponse(status=405)
