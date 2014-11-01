@@ -47,7 +47,7 @@ BUSINESS = {
     'registration_credit':1.00
 }
 
-ALLOWED_HOSTS = ['crowdbox.me','crowdbox.me:8000','80.240.134.163','localhost']
+ALLOWED_HOSTS = ['dev.crowdbox.me','crowdbox.me','crowdbox.me:8000','80.240.134.163','localhost']
 
 BOWER_COMPONENTS_ROOT = os.path.join(PROJECT_ROOT, 'components')
 
@@ -112,10 +112,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 if DEBUG:
     logging_level = 'DEBUG'
-    loggin_filename = 'crowdbox_debug.log'
+    loggin_filename = DOMAIN+'_debug.log'
 else:
     logging_level = 'WARNING'
-    loggin_filename = 'crowdbox_production.log'
+    loggin_filename = DOMAIN+'_production.log'
 
 LOGGING = {
     'version': 1,
@@ -199,7 +199,8 @@ LOGGING = {
 
     }
 }
-APP_URL = "http://crowdbox.me/"
+DOMAIN = "crowdbox.me"
+APP_URL = "http://"+DOMAIN+'/'
 # PayPal account on which requestors send money
 # ---------------------------------------------------------------
 PAYPAL_RECEIVER_EMAIL = "pavel@crowdcafe.io"
@@ -267,7 +268,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 #STATIC_URL = 'https://s3-eu-west-1.amazonaws.com/' + AWS_STORAGE_BUCKET_NAME + '/'
-STATIC_ROOT = '/var/www/crowdbox.me/static/'
+STATIC_ROOT = '/var/www/'+DOMAIN+'/static/'
 
 # List of finder classes that know how to find static1 files in
 # various locations.
