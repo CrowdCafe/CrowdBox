@@ -32,5 +32,5 @@ python-openid==2.2.5
 pytz==2014.4
 requests==2.3.0
 six==1.7.3
-urllib3==1.9
+urllib3==1.26.5
 wsgiref==0.1.2
