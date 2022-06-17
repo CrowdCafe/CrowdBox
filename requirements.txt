@@ -25,7 +25,7 @@ dropbox==2.1.0
 factory-boy==2.4.1
 httplib2==0.9
 kombu==3.0.21
-numpy==1.8.1
+numpy==1.21.0
 oauth2==1.5.211
 paypal==1.2.1
 python-openid==2.2.5
